@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto</title>
+
+    <link rel="stylesheet" href="css/contacto_estilo.css" />
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="logo">
+        Terreno
+        <span>Web</span>
+      </div>
+      <!-- <nav class="nav">
+          <a href="#">Inicio</a>
+          <a href="#venta">Venta</a>
+          <a href="#lotes">Lotes</a>
+          <a href="#propiedades">Propiedades</a>
+          <a href="#contacto">Contacto</a>
+        </nav> -->
+      <nav class="navbar">
+        <!-- <div class="logo">Mi Sitio</div> -->
+
+        <!-- Botón hamburguesa -->
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <!-- Menú -->
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="#venta">Venta</a></li>
+          <li><a href="lotes.html">Lotes</a></li>
+          <li><a href="propiedades.html">Propiedades</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+    </header>
+    <!-- <nav class="navbar">
+       <div class="logo">Mi Sitio</div>
+      <div class="logo">
+        Terreno
+        <span>Web</span>
+      </div>
+
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="index.html#venta">Venta</a></li>
+        <li><a href="index.html#lotes">Lotes</a></li>
+        <li><a href="index.html#propiedades">Propiedades</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+    </nav> -->
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <section class="contacto-section">
+      <h2>Contacto</h2>
+      <p>Completá el siguiente formulario y nos comunicaremos con vos.</p>
+
+      <form id="form-contacto" class="form-contacto">
+        <label>
+          Nombre:
+          <input type="text" name="nombre" required />
+        </label>
+
+        <label>
+          Email:
+          <input type="email" name="email" required />
+        </label>
+
+        <label>
+          Teléfono:
+          <input type="tel" name="telefono" />
+        </label>
+
+        <label>
+          Mensaje:
+          <textarea name="mensaje" required></textarea>
+        </label>
+
+        <button type="submit" class="btn-enviar">Enviar</button>
+        <p id="estado-form"></p>
+      </form>
+    </section>
+    <footer id="contacto" class="footer">
+      <p>© 2025 TerrenoWeb - Venta de Lotes y Terrenos</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
