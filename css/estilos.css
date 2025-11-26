@@ -334,7 +334,7 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 854px) {
   .header {
     width: 90%;
     margin: auto;
