@@ -3,21 +3,43 @@
         "titulo": "Terreno - Ferri - Río Negro",
         "medida": "5000 MTS (MEDIA HECTAREA)",
         "detalle": "FERRI RÍO NEGRO (visitas y charlas informativas sin compromiso ni obligación de compra, sin señas ni reservas). FINANCIACIÓN Entrega de  $10.000.000 + 24 cuotas de $550.000 ( las cuotas son fijas  y en pesos) Precio de contado: $17.000.000",
+        "precio": "$ 17.000.000",
         "imagen": "https://via.placeholder.com/100",
         "ubicacion": "https://www.google.com/maps/place/38°52'48.3''S+68°00'35.1''W/@-38.880071,-68.0303554,5639m"
     },
     {
         "titulo": "Terreno - Villa ''El Chocón''",
         "medida": "N/D",
-        "detalle": "SE VENDE TERRENO EN VILLA EL CHOCON LOTEO LOS GIGANTES 4TA ETAPA CON UNA EXCELENTE UBICACIÓN UNA VISTA IMPRESIONANTE VALOR ANTERIOR 20MIL DOLARES AHORA 18.000.000 PESOS DE CONTADO!!. CON LA TIERRA Y OBRA DE LUZ Y AGUA CANCELADOS!!",
-        "imagen": "https://via.placeholder.com/100",
+        "detalle": "SE VENDE TERRENO EN VILLA EL CHOCON LOTEO LOS GIGANTES 4TA ETAPA CON UNA EXCELENTE UBICACIÓN UNA VISTA IMPRESIONANTE. VALOR U$D 20.000 DOLARES - AHORA $18.000.000 PESOS DE CONTADO!!. CON LA TIERRA Y OBRA DE LUZ Y AGUA CANCELADOS!!",
+        "precio": "U$D 20.000",
         "ubicacion": "https://www.google.com/maps/place/39°15'34.9''S+68°47'52.3''W/@-39.259693,-68.797865,701m"
     },
     {
         "titulo": "Terreno - LOTEO AIRES DE PLOTIER",
         "medida": "360 mt2",
-        "detalle": "Mza G1 Lote 8ª. Lote 360 mt2, pensaba lo siguiente U$S 22.000 contado y financiado U$S25.000 (entrega U$S 12.000 y saldo en 12 cuotas en dólares). Se recibe vehículo!. Se escucha propuestas!!!. Agua luz y gas. barrio cerrado (no es privado) Cerca de todo!! ¡¡¡Sobre calle Alberdi!!!",
-        "imagen": "https://via.placeholder.com/100",
+        "detalle": "Mza G1 Lote 8ª. Lote 360 mt2, valor U$D 22.000 contado y financiado U$S25.000 (entrega U$S 12.000 y saldo en 12 cuotas en dólares). Se recibe vehículo!. Se escucha propuestas!!!. Agua luz y gas. barrio cerrado (no es privado) Cerca de todo!! ¡¡¡Sobre calle Alberdi!!!",
+        "precio": "U$D 22.000",
         "ubicacion": "https://www.google.com/maps/place/38°57'02.1''S+68°12'38.3''W/@-38.9505833,-68.2106389,505m"
+    },
+    {
+        "titulo": "HECTAREAS SOBRE LA NUEVA RUTA 67",
+        "medida": "30000 m2",
+        "detalle": "NUEVA ROTONDA CON CALLE MACHADO QUE SALE AL AUTÓDROMO DE CENTENARIO 3 HECTAREAS A LA VENTA!!!¡¡VALOR U$D 120.000 DOLARES CADA UNA!! ESCRITURABLES!!!!? NO SE PIDEN SEÑAS NI RESERVAS/CUOTAS FIJAS Y EN PESOS, TODO SE PUEDE IR A VER SIN COMPROMISO NI OBLIGACION DE COMPRA ??????? ",
+        "precio": "U$D 120.000",
+        "ubicacion": "https://www.google.com/maps/place/38°50'50.7''S+68°11'20.8''W/@-38.84742,-68.189115,705m"
+    },
+    {
+        "titulo": "BARRIO VILLA CEFERINO",
+        "medida": "223 mt2",
+        "detalle": "TERRENO de 223mt2 CONSTRUCCIÓN DE 63mtr2 DE MATERIAL TRADICIONAL CON 2 DORMITORIOS / COCINA COMEDOR / BAÑO - AMBIENTE DE USO MÚLTIPLES (LOCAL COMERCIAL) - COCHERA CUBIERTA APTA 2 VEHÍCULOS PARTE TRASERA DEL TERRENO CUENTA CON DOS CONSTRUCCIONES GEMELAS DE 38mtr2 - COCINA/COMEDOR BAÑO Y 1 DORMITORIO PLANTA BAJA 80% TERMINADA 1er PISO UN 40% DE LA CONSTRUCCIÓN. VALOR U$D 65.000",
+        "precio": "U$D 65.000",
+        "ubicacion": "https://www.google.com/maps/place/38°56'18.2''S+68°05'47.9''W/@-38.9383889,-68.0966389,505m"
+    },
+    {
+        "titulo": "LOTEO MORADAS DE PLOTTIER",
+        "medida": "300 mt2",
+        "detalle": "¿ESTAS BUSCANDO INVERTIR? ¿TENER TU PROPIO TERRENO? ¿¿¿CONSTRUIR TU FUTURO HOGAR???\n¡¡¡NUEVO LOTEO MORADAS DE PLOTTIER A TRES CUADRAS DE CALLE RÍO COLORADO LIMITE CON NEUQUÉN!!!\n- A 20min del Hiper Coto, cerquita del Nuevo Hospital Norpatagónico y con fácil salida a Ruta 22\n- Lotes de 300mtr2 de 12x25\n- Entrega Abril 2026 con aperturas y enripiado de calles, alumbrado público, Luz y agua!!! \nValor contado $18.000.000 \nEXCELENTE FINANCIACIÓN ENTREGA DE \n$6.800.000 + 36 CTAS !!! \n- cuota 01 a 12 .  $ 350.000\n-  cuota 13 a 24  . $ 450.000\n- Cuota 25 a 36 $ 550.000\n(TIERRA, OBRA DE LUZ, AGUA, GASTOS DE HONORARIOS, RENTAS Y ESCRIBANIA INCLUIDOS)\nCONSULTA LA PROMO LOTE + CONSTRUCCIÓN DE LA CASA",
+        "precio": "$ 18.000.000",
+        "ubicacion": "https://www.google.com/maps/place/38°55'44.1''S+68°12'19.9''W/@-38.9289167,-68.2055278,505m"
     }
 ]

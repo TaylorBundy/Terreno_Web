@@ -1,47 +1,5 @@
 const plataforma = navigator.userAgent;
 let num = 0;
-// Cargar dinámicamente los terrenos desde terrenos.json
-// async function cargarTerrenos() {
-//   try {
-//     const respuesta = await fetch("data/terrenos.json");
-//     const terrenos = await respuesta.json();
-
-//const {data} = require("jquery");
-
-//     const contenedor = document.getElementById("lista-terrenos");
-//     contenedor.innerHTML = ""; // Limpiar lista
-
-//     terrenos.forEach((t) => {
-//       const coords = extraerCoordenadas(t.ubicacion);
-//       console.log("Coordenadas detectadas:", coords);
-
-//       const item = document.createElement("div");
-//       item.classList.add("item");
-
-//       item.innerHTML = `
-//             <img src="${t.imagen}" alt="Terreno" />
-//             <div>
-//                 <h4>${t.titulo}</h4>
-//                 <p>${t.medida}</p>
-//                 <p>${t.detalle}</p>
-//                 ${
-//                   coords
-//                     ? `<p><b>Lat:</b> ${coords.lat} <b>Lng:</b> ${coords.lng}</p>`
-//                     : ""
-//                 }
-//                 <a href="${
-//                   t.ubicacion
-//                 }" target="_blank" class="btn-ubicacion">Ver ubicación</a>
-//             </div>
-//         `;
-
-//       contenedor.appendChild(item);
-//     });
-//   } catch (err) {
-//     console.error("Error al cargar terrenos:", err);
-//   }
-// }
-
 const hamburger = document.getElementById("hamburger");
 const navLinks = document.getElementById("nav-links");
 
@@ -53,263 +11,9 @@ hamburger.addEventListener("click", () => {
 let texto;
 let importePesos;
 let htmlImagenes = "";
+let estupido;
 
-// async function cargarTerrenos2() {
-//   try {
-//     const respuesta = await fetch("data/terrenos.json");
-//     const terrenos = await respuesta.json();
-
-//     const contenedor = document.getElementById("lista-terrenos");
-//     contenedor.innerHTML = ""; // Limpiar lista
-
-//     terrenos.forEach((t) => {
-//       const coords = extraerCoordenadas(t.ubicacion);
-//       //console.log("Coordenadas detectadas:", coords);
-
-//       const item = document.createElement("div");
-//       item.classList.add("item");
-
-//       // Si detectamos coordenadas → generar carpeta dinámica
-//       let rutaImagen = "img/noimage.jpg"; // fallback
-
-//       if (coords) {
-//         // Convertir LAT decimal a formato carpeta: 38.880071 → 38-880071
-//         const carpetaLat = String(coords.lat).replace(".", "-");
-
-//         // Ruta dinámica
-//         rutaImagen = `terrenos/${carpetaLat}/1.avif`;
-//       }
-//       const financiamiento = obtenerFinanciacion(t.detalle);
-//       const contado = obtenerPrecioContado(t.detalle);
-//       const esDolares = contado.includes("U$D");
-
-//       if (esDolares) {
-//         console.log(contado.replace("U$D", ""));
-//         const monto = contado.replace("U$D", "");
-//         (async () => {
-//           const descripcion = await ConvertirApesos(monto);
-//           texto = `Precio Contado en Dolares:<br>${contado
-//             .replace(/\n/g, "<br>")
-//             .toLowerCase()}<br>Precio Contado en Pesos (convertido):<br>$ ${descripcion.toLocaleString()}`;
-//           console.log(descripcion);
-//           item.innerHTML = `
-//       <div class="imagen">
-//           <img src="${rutaImagen}" alt="Terreno" />
-//           </div>
-
-//           <div class="content">
-//               <h4>${t.titulo}</h4>
-//               <ul>
-//               <li><p>Medida:<br> ${t.medida.toLowerCase()}</p></li>
-//               <li><p>Descripción:<br> ${t.detalle.toLowerCase()}</p></li>
-//               <!-- <li>Financiación:<br> ${t.detalle}</li> -->
-//               ${
-//                 financiamiento
-//                   ? `<li><p>Financiación:<br>${financiamiento
-//                       .replace(/\n/g, "<br>")
-//                       .toLowerCase()}</p></li>`
-//                   : ""
-//               }
-//               <!-- ${
-//                 contado
-//                   ? `<li><p>${texto}<br>${contado
-//                       .replace(/\n/g, "<br>")
-//                       .toLowerCase()}</p></li>`
-//                   : ""
-//               } -->
-//               ${contado ? `<li><p>${texto}</p></li>` : ""}
-
-//               </ul>
-//               <!-- <p>${t.medida}</p> -->
-//               <!-- <p>${t.detalle}</p> -->
-
-//               <!-- ${
-//                 coords
-//                   ? `<p><b>Lat:</b> ${coords.lat} <b>Lng:</b> ${coords.lng}</p>`
-//                   : `<p style="color:red;">No se detectaron coordenadas</p>`
-//               } -->
-
-//               <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
-//               <img src="images/ubicacion2.avif"></img>
-//                   <p>Ver ubicación</p>
-//               </a>
-//           </div>
-//         `;
-//         })();
-//         //console.log(descripcion);
-//       } else {
-//         //texto = "Precio Contado en Pesos:";
-//         texto = `Precio Contado en Pesos:<br>${contado
-//           .replace(/\n/g, "<br>")
-//           .toLowerCase()}`;
-//         //return null;
-//       }
-
-//       item.innerHTML = `
-//       <div class="imagen">
-//           <img src="${rutaImagen}" alt="Terreno" />
-//           </div>
-
-//           <div class="content">
-//               <h4>${t.titulo}</h4>
-//               <ul>
-//               <li><p>Medida:<br> ${t.medida.toLowerCase()}</p></li>
-//               <li><p>Descripción:<br> ${t.detalle.toLowerCase()}</p></li>
-//               <!-- <li>Financiación:<br> ${t.detalle}</li> -->
-//               ${
-//                 financiamiento
-//                   ? `<li><p>Financiación:<br>${financiamiento
-//                       .replace(/\n/g, "<br>")
-//                       .toLowerCase()}</p></li>`
-//                   : ""
-//               }
-//               <!-- ${
-//                 contado
-//                   ? `<li><p>${texto}<br>${contado
-//                       .replace(/\n/g, "<br>")
-//                       .toLowerCase()}</p></li>`
-//                   : ""
-//               } -->
-//               ${contado ? `<li><p>${texto}</p></li>` : ""}
-
-//               </ul>
-//               <!-- <p>${t.medida}</p> -->
-//               <!-- <p>${t.detalle}</p> -->
-
-//               <!-- ${
-//                 coords
-//                   ? `<p><b>Lat:</b> ${coords.lat} <b>Lng:</b> ${coords.lng}</p>`
-//                   : `<p style="color:red;">No se detectaron coordenadas</p>`
-//               } -->
-
-//               <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
-//               <img src="images/ubicacion2.avif"></img>
-//                   <p>Ver ubicación</p>
-//               </a>
-//           </div>
-//         `;
-
-//       contenedor.appendChild(item);
-//     });
-//   } catch (err) {
-//     console.error("Error al cargar terrenos:", err);
-//   }
-// }
-
-// async function cargarTerrenos3() {
-//   try {
-//     const respuesta = await fetch("data/terrenos.json");
-//     const terrenos = await respuesta.json();
-
-//     const contenedor = document.getElementById("lista-terrenos");
-//     contenedor.innerHTML = ""; // Limpiar lista
-
-//     for (const t of terrenos) {
-//       const coords = extraerCoordenadas(t.ubicacion);
-
-//       const item = document.createElement("div");
-//       item.classList.add("item");
-
-//       // ------------------------------------------------------
-//       // Cargar imágenes desde carpeta de coordenadas
-//       // ------------------------------------------------------
-//       let htmlImagenes = "";
-
-//       if (coords) {
-//         const carpetaLat = String(coords.lat).replace(".", "-");
-//         const basePath = `terrenos/${carpetaLat}/`;
-
-//         let index = 1;
-//         let sigue = true;
-
-//         while (sigue) {
-//           const ruta = `${basePath}${index}.jpg`;
-//           try {
-//             const resp = await fetch(ruta);
-//             if (resp.ok) {
-//               htmlImagenes += `<img src="${ruta}" class="foto-terreno" alt="Terreno">`;
-//               index++;
-//             } else {
-//               sigue = false;
-//             }
-//           } catch (e) {
-//             sigue = false;
-//           }
-//         }
-//       }
-
-//       if (!htmlImagenes) {
-//         htmlImagenes = `<img src="img/noimage.jpg" class="foto-terreno" alt="Terreno">`;
-//       }
-
-//       // ------------------------------------------------------
-//       // FINANCIACIÓN Y CONTADO
-//       // ------------------------------------------------------
-//       const financiamiento = obtenerFinanciacion(t.detalle);
-//       const contado = obtenerPrecioContado(t.detalle);
-
-//       let texto = "";
-//       let esDolar = false;
-
-//       if (contado) {
-//         esDolar = contado.includes("U$D");
-
-//         if (esDolar) {
-//           const monto = contado.replace("U$D", "").trim();
-
-//           // Convertir a pesos
-//           const montoPesos = await ConvertirApesos(monto);
-
-//           texto = `
-//               Precio Contado en Dólares:<br>${contado.toLowerCase()}<br>
-//               Precio Contado en Pesos (convertido):<br>$ ${montoPesos.toLocaleString()}
-//             `;
-//         } else {
-//           texto = `
-//               Precio Contado en Pesos:<br>${contado.toLowerCase()}
-//             `;
-//         }
-//       }
-
-//       // ------------------------------------------------------
-//       // Insertar en HTML final
-//       // ------------------------------------------------------
-//       item.innerHTML = `
-//           <div class="imagen">${htmlImagenes}</div>
-
-//           <div class="content">
-//               <h4>${t.titulo}</h4>
-
-//               <ul>
-//                 <li><p>Medida:<br>${t.medida.toLowerCase()}</p></li>
-
-//                 <li><p>Descripción:<br>${t.detalle.toLowerCase()}</p></li>
-
-//                 ${
-//                   financiamiento
-//                     ? `<li><p>Financiación:<br>${financiamiento
-//                         .replace(/\n/g, "<br>")
-//                         .toLowerCase()}</p></li>`
-//                     : ""
-//                 }
-
-//                 ${contado ? `<li><p>${texto}</p></li>` : ""}
-//               </ul>
-
-//               <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
-//                   <img src="images/ubicacion2.avif">
-//                   <p>Ver ubicación</p>
-//               </a>
-//           </div>
-//         `;
-
-//       contenedor.appendChild(item);
-//     }
-//   } catch (err) {
-//     console.error("Error al cargar terrenos:", err);
-//   }
-// }
-
+// Cargar dinámicamente los terrenos desde terrenos.json
 async function cargarTerrenos() {
   try {
     const respuesta = await fetch("data/terrenos.json");
@@ -321,7 +25,7 @@ async function cargarTerrenos() {
     //terrenos.forEach((t) => {
     for (const t of terrenos) {
       const coords = extraerCoordenadas(t.ubicacion);
-      //console.log("Coordenadas detectadas:", coords);
+      console.log("Coordenadas detectadas:", coords);
 
       const item = document.createElement("div");
       item.classList.add("item");
@@ -337,24 +41,170 @@ async function cargarTerrenos() {
       const financiamiento = obtenerFinanciacion(t.detalle);
       const contado = obtenerPrecioContado(t.detalle);
       //console.log(financiamiento);
-      //console.log(contado);
+      console.log(contado);
       let texto = "";
       let esDolar = false;
-      if (contado) {
-        esDolar = contado.includes("U$D");
+      let esPesos = false;
+      const lower = t.detalle.toLowerCase();
+      //console.log(lower);
+      // if (contado) {
+      //   const esPesos1 = lower.includes("pesos");
+      //   //lower.includes("peso") ||
+      //   //lower.includes("$") ||
+      //   //lower.includes("ars");
 
-        if (esDolar) {
-          const monto = contado.replace("U$D", "").trim();
+      //   const esDolares1 =
+      //     lower.includes("dolar") ||
+      //     //lower.includes("dolares") ||
+      //     //lower.includes("dólar") ||
+      //     //lower.includes("usd") ||
+      //     lower.includes("u$d") ||
+      //     lower.includes("u$s");
+
+      //   //console.log(esPesos1);
+      //   //console.log(esDolares1);
+
+      //   //let prueba = contado.split(" ")[0];
+      //   //console.log(prueba);
+
+      //   //esDolar = contado.includes("U$D");
+      //   //esPesos = contado.includes("$");
+      //   const esDolar2 = /u\$d|usd|u\$/i.test(contado);
+      //   const esPesos2 = /\$\s*\d/.test(lower); //&& !esDolar2;
+      //   console.log(`dolar ${esDolar2}`);
+      //   console.log(`peso ${esPesos2}`);
+      //   // if (esDolar2) {
+      //   //   console.log(`dolar ${esDolar2}`);
+      //   // }
+      //   // if (esPesos2) {
+      //   //   console.log(`peso ${esPesos2}`);
+      //   // }
+
+      //   // if (esPesos && esDolar) {
+      //   //   console.log("incluye ambos");
+      //   // }
+
+      //   if (esDolar && !esPesos2) {
+      //     const monto = contado.replace("U$D", "").trim();
+      //     const montoPesos = await ConvertirApesos(monto);
+
+      //     texto = `
+      //         Precio Contado en Dólares:<br>${contado.toLowerCase()}<br>
+      //         Precio Contado en Pesos (convertido):<br>$ ${montoPesos.toLocaleString()}
+      //       `;
+      //     //} else if (esPesos && esDolar) {
+      //     //console.log("incluye ambos");
+      //   } else if (esPesos2 && esDolar2) {
+      //     const monto = contado.replace("U$D", "").trim();
+      //     const montoPesos = await ConvertirApesos(monto);
+      //     texto = `
+      //     Precio Contado en Pesos:<br>${contado.toLowerCase()}<br>
+      //         Precio Contado en Dólares:<br>${contado.toLowerCase()}<br>
+      //         Precio Contado en Pesos (convertido):<br>$ ${montoPesos.toLocaleString()}
+      //       `;
+      //   } else {
+      //     texto = `Precio Contado en Pesos:<br>${contado.toLowerCase()}`;
+      //   }
+      // }
+      if (contado) {
+        // Detecta por el texto completo del terreno
+        //const lower = t.detalle.toLowerCase();
+        const esPesos = /(peso|pesos|ars|\$\s*\d)/i.test(lower);
+        const esDolar = /(u\$d|usd|u\$|dolar|dólar)/i.test(lower);
+        //console.log(`dolar ${esDolar}`);
+        //console.log(`peso ${esPesos}`);
+
+        // Detecta por el valor ya formateado
+        const contadoEsDolar = /u\$d|usd/i.test(contado);
+        const contadoEsPesos = /^\$\s*\d/.test(contado);
+        //console.log(`dolar ${contadoEsDolar}`);
+        //console.log(`pesos ${contadoEsPesos}`);
+
+        //let texto = "";
+
+        if (esDolar && !esPesos) {
+          // Dólares → convertir a pesos
+          //console.log(contado.dolares);
+          const puto = contado.dolares;
+          const monto = puto.replace("U$D ", ""); //contado; //contado.replace(/u\$d/i, "").trim();
           const montoPesos = await ConvertirApesos(monto);
+          //console.log(montoPesos);
 
           texto = `
-              Precio Contado en Dólares:<br>${contado.toLowerCase()}<br>
-              Precio Contado en Pesos (convertido):<br>$ ${montoPesos.toLocaleString()}
-            `;
-        } else {
-          texto = `Precio Contado en Pesos:<br>${contado.toLowerCase()}`;
+            <!-- Precio Contado en Dólares:<br>${contado.dolares}<br> -->
+            Precio Contado en Dólares:<br>${t.precio}<br>
+            Precio Contado en Pesos (convertido):<br>$ ${montoPesos.toLocaleString()}
+          `;
+        } else if (esPesos && !esDolar) {
+          //console.log(contado.pesos);
+          texto = `
+            Precio Contado en Pesos:<br>${t.precio}
+          `;
+        } else if (esDolar && esPesos) {
+          if (esDolar) {
+            // valorDolares = textoContado
+            //   .replace(/[^\d,\.]/g, "")
+            //   .replace(/\./g, "")
+            //   .replace(",", ".");
+            //const monto = valorDolares.replace(/u\$d/i, "").trim();
+            const puto = contado.dolares;
+            const monto = puto.replace("U$D ", ""); //contado; //contado.replace(/u\$d/i, "").trim();
+            valorDolares = await ConvertirApesos(monto);
+            //console.log(valorDolares);
+          }
+          // let valorPesos = null;
+          // let valorDolares = null;
+          // const textoContado = typeof contado === "string" ? contado : "";
+          // // Detectar dólares *solo si empieza* o contiene bien el formato USD
+          // const esDolar1 = /U\$D|USD/i.test(textoContado);
+
+          // // Detectar pesos SIN confundir dólares
+          // const esPesos1 = /\$\s*\d/.test(textoContado) && !esDolar;
+          // console.log({esPesos1, esDolar1});
+          // console.log(textoContado);
+          // if (esPesos1) {
+          //   valorPesos = textoContado
+          //     .replace(/[^\d,\.]/g, "") // solo números y separadores
+          //     .replace(/\./g, "") // sacar puntos
+          //     .replace(",", ".");
+          // }
+          // if (esDolar1) {
+          //   valorDolares = textoContado
+          //     .replace(/[^\d,\.]/g, "")
+          //     .replace(/\./g, "")
+          //     .replace(",", ".");
+          //   //const monto = valorDolares.replace(/u\$d/i, "").trim();
+          //   const puto = contado.dolares;
+          //   const monto = puto.replace("U$D ", ""); //contado; //contado.replace(/u\$d/i, "").trim();
+          //   valorDolares = await ConvertirApesos(monto);
+          // }
+          // // console.log({
+          // //   pesos: valorPesos,
+          // //   dolares: valorDolares,
+          // // });
+          // console.log(valorPesos);
+          // const limpio = textoContado.replace(/\./g, "").replace(",", ".");
+          // console.log(limpio);
+          //const monto = valorDolares.replace(/u\$d/i, "").trim();
+          //const montoPesos = await ConvertirApesos(monto);
+
+          texto = `
+            Precio Contado en Pesos:<br>${contado.pesos}<br>
+            Precio Contado en Dólares:<br>${contado.dolares}<br>
+            Precio Contado en Pesos (convertido):<br>$ ${valorDolares.toLocaleString()}
+          `;
         }
+
+        // Insertar en el HTML
+        // item.querySelector(".content ul").innerHTML += `
+        //   <li><p>${texto}</p></li>
+        // `;
       }
+
+      //else if (esPesos) {
+      //(contado.includes("U$D") && contado.includes("$")) {
+      //console.log("incluye ambos");
+      //}
 
       // item.innerHTML = `
       //   <img src="${rutaImagen}" alt="Terreno" />
@@ -375,6 +225,7 @@ async function cargarTerrenos() {
       //       </a>
       //   </div>
       // `;
+      //console.log(texto);
       item.innerHTML = `
         <div class="tituloImg">
           <div class="titulo">
@@ -407,7 +258,7 @@ async function cargarTerrenos() {
                 : ""
             }
 
-            ${contado ? `<li><p>${texto}</p></li>` : ""}
+            <li><p>${texto}</p></li>
           </ul>
 
           <!-- <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
@@ -595,14 +446,14 @@ async function cargarTerrenosl() {
             //contenedorImg.style.justifyContent = "center";
             contenedorImg.style.justifyContent = "space-evenly";
             contenedorImg.style.alignItems = "center";
-            console.log(contenedorImg);
-            console.log(idx);
+            //console.log(contenedorImg);
+            //console.log(idx);
           });
         }
-        console.log(total.length);
-        console.log(document.querySelectorAll(".imagen img").length);
-        console.log(item.querySelectorAll(".imagen img"));
-        console.log(filas);
+        //console.log(total.length);
+        //console.log(document.querySelectorAll(".imagen img").length);
+        //console.log(item.querySelectorAll(".imagen img"));
+        //console.log(filas);
         // const img = document.querySelectorAll(".imagen");
         // const contenido = document.querySelectorAll(".content");
         // img[1].style.display = "flex";
@@ -654,11 +505,7 @@ function extraerCoordenadas(url) {
     // Reemplazo de "." por "-" aquí
     const latStr1 = matchDecimal[1].replace("-", "");
     const lngStr1 = matchDecimal[2].replace("-", "");
-    //console.log(latStr1);
-    //console.log(lngStr1);
-    //const latStr = matchDecimal[1].replace(".", "-");
     const latStr = latStr1.replace(".", "-");
-    //const lngStr = matchDecimal[2].replace(".", "-");
     const lngStr = lngStr1.replace(".", "-");
 
     return {
@@ -699,58 +546,6 @@ function extraerCoordenadas(url) {
   return null;
 }
 
-// function extraerCoordenadas(url) {
-//   if (!url) return null;
-
-//   // 1) Coordenadas decimales dentro de @LAT,LON
-//   const regexDecimal = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
-//   const matchDecimal = url.match(regexDecimal);
-
-//   if (matchDecimal) {
-//     const latStr = matchDecimal[1].replace(".", "-");
-//     const lngStr = matchDecimal[2].replace(".", "-");
-//     return {
-//       latStr,
-//       lngStr,
-//       //lat: parseFloat(matchDecimal[1].replace(".", "-")),
-//       //lng: parseFloat(matchDecimal[2]),
-//       formato: "decimal",
-//     };
-//   }
-
-//   // 2) Coordenadas en formato DMS (grados, minutos y segundos)
-//   const regexDMS =
-//     /(\d+)[°](\d+)'(\d+\.\d+)"([NS])\+(\d+)[°](\d+)'(\d+\.\d+)"([EW])/;
-//   const matchDMS = url.match(regexDMS);
-
-//   if (matchDMS) {
-//     const lat = convertirDMADecimal(
-//       matchDMS[1],
-//       matchDMS[2],
-//       matchDMS[3],
-//       matchDMS[4]
-//     );
-
-//     const lng = convertirDMADecimal(
-//       matchDMS[5],
-//       matchDMS[6],
-//       matchDMS[7],
-//       matchDMS[8]
-//     );
-
-//     return {
-//       //lat,
-//       //lng,
-//       lat: lat.toString().replace(".", "-"),
-//       lng: lng.toString().replace(".", "-"),
-//       formato: "DMS",
-//     };
-//   }
-
-//   // Si no se detectan coordenadas
-//   return null;
-// }
-
 // Conversión de DMS a decimal
 function convertirDMADecimal(grados, minutos, segundos, direccion) {
   let decimal = Number(grados) + Number(minutos) / 60 + Number(segundos) / 3600;
@@ -777,15 +572,6 @@ document.addEventListener("click", function (e) {
     }
   }
 });
-
-// function obtenerFinanciacion2(texto) {
-//   // Si no hay financiación, devolvemos null
-//   if (!texto.includes("FINANCIACIÓN")) return null;
-
-//   // Extraemos desde "FINANCIACIÓN" hasta el final
-//   const index = texto.indexOf("FINANCIACIÓN");
-//   return texto.substring(index).trim();
-// }
 
 function obtenerFinanciacion(texto) {
   if (!texto) return null;
@@ -818,194 +604,106 @@ function obtenerFinanciacion(texto) {
   return texto.substring(indice).trim();
 }
 
-// function obtenerContado2(texto) {
-//   const claves = [
-//     "valor de contado",
-//     "precio contado",
-//     "precio de contado",
-//     "de contado",
-//     "contado",
-//     "valor",
-//     "valor anterior",
-//   ];
-
-//   // Buscar la primera coincidencia
-//   let indice = -1;
-//   for (const palabra of claves) {
-//     const pos = texto.toLowerCase().indexOf(palabra.toLowerCase());
-//     if (pos !== -1) {
-//       indice = pos;
-//       break;
-//     }
-//   }
-
-//   if (indice === -1) return null; // No existe apartado de contado
-
-//   return texto.substring(indice).trim();
-// }
-
-// function obtenerContado(texto) {
-//   const claves = [
-//     "valor de contado",
-//     "precio contado",
-//     "precio de contado",
-//     "de contado",
-//     "contado",
-//   ];
-
-//   const min = texto.toLowerCase();
-
-//   // 1. Buscar primera coincidencia
-//   let indice = -1;
-//   for (const palabra of claves) {
-//     const pos = min.indexOf(palabra.toLowerCase());
-//     if (pos !== -1 && (indice === -1 || pos < indice)) {
-//       indice = pos;
-//     }
-//   }
-
-//   if (indice === -1) return null;
-
-//   // 2. Recortar desde ahí
-//   let recorte = texto.substring(indice).trim();
-
-//   // 3. Cortar cuando aparezcan mayúsculas completas que suelen ser otros mensajes
-//   //    como: "CON LA TIERRA", "OBRA DE LUZ", "AGUA", "CANCELADOS"...
-//   const cortadores = [
-//     "CON LA",
-//     "OBRA",
-//     "TIERRA",
-//     "AGUA",
-//     "CANCELADOS",
-//     "CUOTAS",
-//     "FINAN",
-//   ];
-
-//   for (const c of cortadores) {
-//     const pos = recorte.indexOf(c);
-//     if (pos > 5) {
-//       // evitar cortar dentro de "DE CONTADO!!"
-//       recorte = recorte.substring(0, pos).trim();
-//     }
-//   }
-
-//   return recorte;
-// }
 // function obtenerPrecioContado2(texto) {
+//   if (!texto) return null;
+
 //   const lower = texto.toLowerCase();
-//   const indiceContado = lower.indexOf("contado");
+//   const idxContado = lower.indexOf("contado");
+//   const idxValor = lower.indexOf("valor");
+
+//   let indiceContado = -1;
+//   let palabraClave = null;
+
+//   if (idxContado !== -1 && idxValor !== -1) {
+//     if (idxContado < idxValor) {
+//       indiceContado = idxContado;
+//       palabraClave = "contado";
+//     } else {
+//       indiceContado = idxValor;
+//       palabraClave = "valor";
+//     }
+//   } else if (idxContado !== -1) {
+//     indiceContado = idxContado;
+//     palabraClave = "contado";
+//   } else if (idxValor !== -1) {
+//     indiceContado = idxValor;
+//     palabraClave = "valor";
+//   }
 
 //   if (indiceContado === -1) return null;
 
-//   // 1. Tomar el texto posterior a "contado"
-//   const posterior = texto.substring(indiceContado + "contado".length).trim();
+//   // -----------------------------------------------------------------
+//   // FUNCIÓN: detectar el valor y su moneda sin modificarla
+//   // -----------------------------------------------------------------
+//   function detectarValor(raw) {
+//     if (!raw) return null;
 
-//   // 2. Tomar las primeras 2 palabras luego de "contado"
-//   const palabras = posterior.split(/\s+/).slice(0, 2);
+//     let valor = raw.replace(/[^\d\.]/g, ""); // deja solo números y puntos
+//     if (!valor) return null;
 
-//   const contieneNumero = (str) => /\d/.test(str);
+//     if (/u\$d|usd|u\$s/i.test(raw)) {
+//       return {tipo: "dolares", valor: `U$D ${valor}`};
+//     }
 
-//   // 3. Si NO aparece un número en las primeras 2 palabras → buscar hacia atrás
-//   const hayNumeroAdelante = palabras.some(contieneNumero);
-
-//   if (!hayNumeroAdelante) {
-//     // Buscar valores numéricos mayores o iguales a 5 dígitos (para evitar 20, 50, etc)
-//     const numeros = [...texto.matchAll(/(\d[\d\.]{4,})/g)];
-
-//     if (numeros.length > 0) {
-//       // Tomar el ÚLTIMO número antes de "contado"
-//       let numeroCorrecto = null;
-
-//       for (const n of numeros) {
-//         if (n.index < indiceContado) {
-//           numeroCorrecto = n[0];
-//         }
-//       }
-//       console.log(numeroCorrecto);
-
-//       return numeroCorrecto ? numeroCorrecto : null;
+//     if (/\$/i.test(raw)) {
+//       return {tipo: "pesos", valor: `$ ${valor}`};
 //     }
 
 //     return null;
 //   }
 
-//   // 4. Caso normal: sí hay número después de "contado"
-//   console.log(palabras.find(contieneNumero));
-//   return palabras.find(contieneNumero);
-// }
-
-// function obtenerPrecioContado3(texto) {
-//   if (!texto) return null;
-
-//   const lower = texto.toLowerCase();
-//   const indiceContado = lower.indexOf("contado");
-//   if (indiceContado === -1) return null;
-
 //   // -----------------------------------------------------------------
-//   // FUNCIÓN EXTRA: determina si un valor es PESOS o DÓLARES
+//   // BUSCAR TODOS LOS VALORES EN EL TEXTO
 //   // -----------------------------------------------------------------
-//   function formatearValor(valor, texto) {
-//     if (!valor) return null;
-//     const lower = texto.toLowerCase();
+//   const regexValor = /(U\$D\s*\d[\d\.]*|\$\s*\d[\d\.]*)/gi;
+//   const encontrados = [...texto.matchAll(regexValor)];
 
-//     const esPesos =
-//       lower.includes("pesos") ||
-//       lower.includes("peso") ||
-//       lower.includes("$") ||
-//       lower.includes("ars");
+//   let resultado = {
+//     pesos: null,
+//     dolares: null,
+//   };
 
-//     const esDolares =
-//       lower.includes("dolar") ||
-//       lower.includes("dólar") ||
-//       lower.includes("usd") ||
-//       lower.includes("u$d") ||
-//       lower.includes("u$s");
+//   for (const m of encontrados) {
+//     const dato = detectarValor(m[0]);
+//     if (!dato) continue;
 
-//     if (esPesos && !esDolares) return `$ ${valor}`;
-//     if (esDolares && !esPesos) return `U$D ${valor}`;
+//     if (dato.tipo === "pesos" && !resultado.pesos) {
+//       resultado.pesos = dato.valor;
+//     }
+//     if (dato.tipo === "dolares" && !resultado.dolares) {
+//       resultado.dolares = dato.valor;
+//     }
+//   }
 
-//     // Si menciona ambos, elegimos el más cercano al valor
-//     const idxValor = texto.indexOf(valor);
-//     const idxPeso = lower.indexOf("peso");
-//     const idxDolar = lower.indexOf("dolar");
-
-//     const distPeso = Math.abs(idxValor - idxPeso);
-//     const distDolar = Math.abs(idxValor - idxDolar);
-
-//     if (distPeso < distDolar) return `$ ${valor}`;
-//     else return `U$D ${valor}`;
+//   // Si encontró ambos → devolver ambos
+//   if (resultado.pesos || resultado.dolares) {
+//     return resultado;
 //   }
 
 //   // -----------------------------------------------------------------
-//   // 1) Buscar hacia adelante (primeras 2 palabras)
+//   // SI NO encontró valores directos con $ o U$D → usar la lógica vieja
 //   // -----------------------------------------------------------------
-//   const posterior = texto.substring(indiceContado + "contado".length).trim();
+//   const posterior = texto.substring(indiceContado + palabraClave.length).trim();
 //   const palabras = posterior.split(/\s+/).slice(0, 2);
 
 //   const contieneNumero = (str) => /\d/.test(str);
+//   const numero = palabras.find(contieneNumero);
 
-//   const hayNumeroAdelante = palabras.some(contieneNumero);
-
-//   if (hayNumeroAdelante) {
-//     const numero = palabras.find(contieneNumero);
-//     return formatearValor(numero, texto);
+//   if (numero) {
+//     return {pesos: `$ ${numero}`, dolares: null};
 //   }
 
-//   // -----------------------------------------------------------------
-//   // 2) NO hay número adelante → buscar hacia atrás
-//   //    nnnnn o nn.nn.nn o 20000 o 20.000.000 etc.
-//   // -----------------------------------------------------------------
 //   const regexNumero = /(\d[\d\.]{4,})/g;
 //   const coincidencias = [...texto.matchAll(regexNumero)];
 
 //   if (coincidencias.length > 0) {
 //     let ultimoNumeroAntes = null;
-
 //     for (const c of coincidencias) {
 //       if (c.index < indiceContado) ultimoNumeroAntes = c[0];
 //     }
-
-//     return ultimoNumeroAntes ? formatearValor(ultimoNumeroAntes, texto) : null;
+//     if (ultimoNumeroAntes) {
+//       return {pesos: `$ ${ultimoNumeroAntes}`, dolares: null};
+//     }
 //   }
 
 //   return null;
@@ -1015,7 +713,136 @@ function obtenerPrecioContado(texto) {
   if (!texto) return null;
 
   const lower = texto.toLowerCase();
-  const indiceContado = lower.indexOf("contado");
+
+  // IDENTIFICAR palabra clave
+  const idxContado = lower.indexOf("contado");
+  const idxValor = lower.indexOf("valor");
+  let indiceContado = -1;
+  let palabraClave = null;
+
+  if (idxContado !== -1 && idxValor !== -1) {
+    if (idxContado < idxValor) {
+      indiceContado = idxContado;
+      palabraClave = "contado";
+    } else {
+      indiceContado = idxValor;
+      palabraClave = "valor";
+    }
+  } else if (idxContado !== -1) {
+    indiceContado = idxContado;
+    palabraClave = "contado";
+  } else if (idxValor !== -1) {
+    indiceContado = idxValor;
+    palabraClave = "valor";
+  }
+
+  if (indiceContado === -1) return null;
+
+  // -----------------------------------------------------------------
+  // FUNCION: determina si el valor es pesos o dólares
+  // -----------------------------------------------------------------
+  function detectarMoneda(str) {
+    const l = str.toLowerCase();
+
+    if (
+      l.includes("u$d") ||
+      l.includes("usd") ||
+      l.includes("u$s") ||
+      l.startsWith("u$")
+    )
+      return "USD";
+
+    // Para evitar falso positivo: "$" SOLO si no es "U$D"
+    if (/^\$/.test(str.trim())) return "ARS";
+
+    return null;
+  }
+
+  // -----------------------------------------------------------------
+  // Regex mejorado: captura: $ 25000 | U$D 35.000 | 25000 | 25.000
+  // -----------------------------------------------------------------
+  const regexValor =
+    /(u\$d\s*\d[\d\.]*|usd\s*\d[\d\.]*|u\$s\s*\d[\d\.]*|\$\s*\d[\d\.]*|\b\d[\d\.]{3,})/gi;
+  const encontrados = [...texto.matchAll(regexValor)];
+
+  let resultado = {pesos: null, dolares: null};
+
+  for (const m of encontrados) {
+    const raw = m[0];
+    const moneda = detectarMoneda(raw);
+    console.log(raw);
+
+    // limpiar el número
+    const numero = raw.replace(/[^\d\.]/g, "");
+
+    if (!numero) continue;
+
+    if (moneda === "ARS") {
+      resultado.pesos = `$ ${numero}`;
+    } else if (moneda === "USD") {
+      resultado.dolares = `U$D ${numero}`;
+    } else {
+      // Si no tiene símbolo, decidir por contexto global
+      if (
+        lower.includes("usd") ||
+        lower.includes("u$d") ||
+        lower.includes("dolar")
+      )
+        resultado.dolares = `U$D ${numero}`;
+      else resultado.pesos = `$ ${numero}`;
+    }
+  }
+
+  // Si encontró valores → devolverlos
+  if (resultado.pesos || resultado.dolares) return resultado;
+
+  // -----------------------------------------------------------------
+  // Búsqueda hacia adelante (primer número después de contado)
+  // -----------------------------------------------------------------
+  const posterior = texto.substring(indiceContado + palabraClave.length).trim();
+  const palabras = posterior.split(/\s+/).slice(0, 2);
+  const numeroAdelante = palabras.find((p) => /\d/.test(p));
+
+  if (numeroAdelante) {
+    return {pesos: `$ ${numeroAdelante}`, dolares: null};
+  }
+
+  return null;
+}
+
+function obtenerPrecioContado2(texto) {
+  if (!texto) return null;
+
+  const lower = texto.toLowerCase();
+  const indiceContado1 = lower.indexOf("contado");
+  // Buscar "contado" o "valor"
+  const idxContado = lower.indexOf("contado");
+  const idxValor = lower.indexOf("valor");
+  let indiceContado = -1;
+  let palabraClave = null;
+  //if (indiceContado === -1) return null;
+
+  // if (idxContado !== -1 && idxValor !== -1) {
+  //   indiceContado = Math.min(idxContado, idxValor);
+  // } else {
+  //   indiceContado = idxContado !== -1 ? idxContado : idxValor;
+  // }
+  if (idxContado !== -1 && idxValor !== -1) {
+    if (idxContado < idxValor) {
+      indiceContado = idxContado;
+      palabraClave = "contado";
+    } else {
+      indiceContado = idxValor;
+      palabraClave = "valor";
+    }
+  } else if (idxContado !== -1) {
+    indiceContado = idxContado;
+    palabraClave = "contado";
+  } else if (idxValor !== -1) {
+    indiceContado = idxValor;
+    palabraClave = "valor";
+  }
+  //console.log(indiceContado);
   if (indiceContado === -1) return null;
 
   // -----------------------------------------------------------------
@@ -1040,18 +867,24 @@ function obtenerPrecioContado(texto) {
 
     const esDolares =
       lower.includes("dolar") ||
+      lower.includes("dolares") ||
       lower.includes("dólar") ||
       lower.includes("usd") ||
       lower.includes("u$d") ||
       lower.includes("u$s");
+    console.log(`dolar ${esDolares}`);
+    console.log(`peso ${esPesos}`);
+    console.log(`valor ${valor}`);
 
     if (esPesos && !esDolares) return `$ ${valor}`;
     if (esDolares && !esPesos) return `U$D ${valor}`;
 
     // Si menciona ambos, elegimos el más cercano al valor
     const idxValor = texto.indexOf(valor);
-    const idxPeso = lower.indexOf("peso");
-    const idxDolar = lower.indexOf("dolar");
+    const idxPeso = lower.indexOf("pesos");
+    const idxDolar = lower.indexOf("dolares");
+    //console.log(`dolar: ${idxDolar}`);
+    //console.log(`peso: ${idxPeso}`);
 
     const distPeso = Math.abs(idxValor - idxPeso);
     const distDolar = Math.abs(idxValor - idxDolar);
@@ -1063,7 +896,8 @@ function obtenerPrecioContado(texto) {
   // -----------------------------------------------------------------
   // 1) Buscar hacia adelante (primeras 2 palabras)
   // -----------------------------------------------------------------
-  const posterior = texto.substring(indiceContado + "contado".length).trim();
+  //const posterior = texto.substring(indiceContado + "contado".length).trim();
+  const posterior = texto.substring(indiceContado + palabraClave.length).trim();
   const palabras = posterior.split(/\s+/).slice(0, 2);
 
   const contieneNumero = (str) => /\d/.test(str);
@@ -1105,7 +939,7 @@ async function ConvertirApesos(importe) {
     );
     data = await resp.json();
     const pesos = await data.result.ARS;
-    console.log(pesos);
+    //console.log(pesos);
     return pesos;
   } catch {
     print("Ha ocurrido un error");
