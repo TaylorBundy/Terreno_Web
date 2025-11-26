@@ -555,6 +555,7 @@ function convertirDMADecimal(grados, minutos, segundos, direccion) {
 
 // Ejecutar al cargar la página
 document.addEventListener("DOMContentLoaded", cargarTerrenos);
+window.addEventListener("DOMContentLoaded", cargarInformacion);
 
 document.addEventListener("click", function (e) {
   // Solo si clickeaste una imagen dentro de un terreno
@@ -943,5 +944,41 @@ async function ConvertirApesos(importe) {
     return pesos;
   } catch {
     print("Ha ocurrido un error");
+  }
+}
+
+async function cargarInformacion() {
+  try {
+    // 1) Cargar JSON (puede ser local o remoto)
+    const resp = await fetch("data/informacion.json");
+    const data = await resp.json();
+    console.log(data);
+
+    // 2) Seleccionar el contenedor
+    const contenedor = document.querySelector(".destacados");
+    const info = document.createElement("div");
+    info.className = "tituloInformacion";
+    info.innerHTML = `
+      <h1>Información Importante</h1>
+    `;
+    contenedor.innerHTML = ""; // limpiar contenido actual
+    contenedor.appendChild(info);
+
+    // 3) Generar tarjetas dinámicamente
+    data.forEach((bloque) => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+
+      card.innerHTML = `
+        <h3>${bloque.titulo}</h3>
+        <ul>
+          ${bloque.items.map((i) => `<li>${i}</li>`).join("")}
+        </ul>
+      `;
+
+      contenedor.appendChild(card);
+    });
+  } catch (error) {
+    console.error("Error cargando destacados:", error);
   }
 }
