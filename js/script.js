@@ -12,6 +12,26 @@ let texto;
 let importePesos;
 let htmlImagenes = "";
 let estupido;
+let textoBtnUbicacion;
+let imgInfo;
+
+window.onload = function () {
+  console.log(plataforma);
+  if (plataforma.includes("Android")) {
+    textoBtnUbicacion = "hhh ";
+    const imagen = document.querySelector(".imgFlotante"); //.style.display = "none";
+    console.log(imagen);
+    imgInfo = "images/info.avif";
+    // Logo.forEach(logo => {
+    //   logo.setAttribute('src', 'favicon.ico');
+    // });
+    // PorcentajeCosto.style.display = 'table-row';
+    //porcentaje = document.getElementById('porcentajeCostoInput')?.value || 60;
+  } else if (plataforma.includes("Win")) {
+    textoBtnUbicacion = "Ver ubicación";
+    imgInfo = "images/left.avif";
+  }
+};
 
 // Cargar dinámicamente los terrenos desde terrenos.json
 async function cargarTerrenos() {
@@ -25,7 +45,7 @@ async function cargarTerrenos() {
     //terrenos.forEach((t) => {
     for (const t of terrenos) {
       const coords = extraerCoordenadas(t.ubicacion);
-      console.log("Coordenadas detectadas:", coords);
+      //console.log("Coordenadas detectadas:", coords);
 
       const item = document.createElement("div");
       item.classList.add("item");
@@ -41,90 +61,18 @@ async function cargarTerrenos() {
       const financiamiento = obtenerFinanciacion(t.detalle);
       const contado = obtenerPrecioContado(t.detalle);
       //console.log(financiamiento);
-      console.log(contado);
+      //console.log(contado);
       let texto = "";
       let esDolar = false;
       let esPesos = false;
       const lower = t.detalle.toLowerCase();
-      //console.log(lower);
-      // if (contado) {
-      //   const esPesos1 = lower.includes("pesos");
-      //   //lower.includes("peso") ||
-      //   //lower.includes("$") ||
-      //   //lower.includes("ars");
-
-      //   const esDolares1 =
-      //     lower.includes("dolar") ||
-      //     //lower.includes("dolares") ||
-      //     //lower.includes("dólar") ||
-      //     //lower.includes("usd") ||
-      //     lower.includes("u$d") ||
-      //     lower.includes("u$s");
-
-      //   //console.log(esPesos1);
-      //   //console.log(esDolares1);
-
-      //   //let prueba = contado.split(" ")[0];
-      //   //console.log(prueba);
-
-      //   //esDolar = contado.includes("U$D");
-      //   //esPesos = contado.includes("$");
-      //   const esDolar2 = /u\$d|usd|u\$/i.test(contado);
-      //   const esPesos2 = /\$\s*\d/.test(lower); //&& !esDolar2;
-      //   console.log(`dolar ${esDolar2}`);
-      //   console.log(`peso ${esPesos2}`);
-      //   // if (esDolar2) {
-      //   //   console.log(`dolar ${esDolar2}`);
-      //   // }
-      //   // if (esPesos2) {
-      //   //   console.log(`peso ${esPesos2}`);
-      //   // }
-
-      //   // if (esPesos && esDolar) {
-      //   //   console.log("incluye ambos");
-      //   // }
-
-      //   if (esDolar && !esPesos2) {
-      //     const monto = contado.replace("U$D", "").trim();
-      //     const montoPesos = await ConvertirApesos(monto);
-
-      //     texto = `
-      //         Precio Contado en Dólares:<br>${contado.toLowerCase()}<br>
-      //         Precio Contado en Pesos (convertido):<br>$ ${montoPesos.toLocaleString()}
-      //       `;
-      //     //} else if (esPesos && esDolar) {
-      //     //console.log("incluye ambos");
-      //   } else if (esPesos2 && esDolar2) {
-      //     const monto = contado.replace("U$D", "").trim();
-      //     const montoPesos = await ConvertirApesos(monto);
-      //     texto = `
-      //     Precio Contado en Pesos:<br>${contado.toLowerCase()}<br>
-      //         Precio Contado en Dólares:<br>${contado.toLowerCase()}<br>
-      //         Precio Contado en Pesos (convertido):<br>$ ${montoPesos.toLocaleString()}
-      //       `;
-      //   } else {
-      //     texto = `Precio Contado en Pesos:<br>${contado.toLowerCase()}`;
-      //   }
-      // }
       if (contado) {
         // Detecta por el texto completo del terreno
-        //const lower = t.detalle.toLowerCase();
         const esPesos = /(peso|pesos|ars|\$\s*\d)/i.test(lower);
         const esDolar = /(u\$d|usd|u\$|dolar|dólar)/i.test(lower);
-        //console.log(`dolar ${esDolar}`);
-        //console.log(`peso ${esPesos}`);
-
-        // Detecta por el valor ya formateado
-        const contadoEsDolar = /u\$d|usd/i.test(contado);
-        const contadoEsPesos = /^\$\s*\d/.test(contado);
-        //console.log(`dolar ${contadoEsDolar}`);
-        //console.log(`pesos ${contadoEsPesos}`);
-
-        //let texto = "";
 
         if (esDolar && !esPesos) {
           // Dólares → convertir a pesos
-          //console.log(contado.dolares);
           const puto = contado.dolares;
           const monto = puto.replace("U$D ", ""); //contado; //contado.replace(/u\$d/i, "").trim();
           const montoPesos = await ConvertirApesos(monto);
@@ -142,51 +90,10 @@ async function cargarTerrenos() {
           `;
         } else if (esDolar && esPesos) {
           if (esDolar) {
-            // valorDolares = textoContado
-            //   .replace(/[^\d,\.]/g, "")
-            //   .replace(/\./g, "")
-            //   .replace(",", ".");
-            //const monto = valorDolares.replace(/u\$d/i, "").trim();
             const puto = contado.dolares;
             const monto = puto.replace("U$D ", ""); //contado; //contado.replace(/u\$d/i, "").trim();
             valorDolares = await ConvertirApesos(monto);
-            //console.log(valorDolares);
           }
-          // let valorPesos = null;
-          // let valorDolares = null;
-          // const textoContado = typeof contado === "string" ? contado : "";
-          // // Detectar dólares *solo si empieza* o contiene bien el formato USD
-          // const esDolar1 = /U\$D|USD/i.test(textoContado);
-
-          // // Detectar pesos SIN confundir dólares
-          // const esPesos1 = /\$\s*\d/.test(textoContado) && !esDolar;
-          // console.log({esPesos1, esDolar1});
-          // console.log(textoContado);
-          // if (esPesos1) {
-          //   valorPesos = textoContado
-          //     .replace(/[^\d,\.]/g, "") // solo números y separadores
-          //     .replace(/\./g, "") // sacar puntos
-          //     .replace(",", ".");
-          // }
-          // if (esDolar1) {
-          //   valorDolares = textoContado
-          //     .replace(/[^\d,\.]/g, "")
-          //     .replace(/\./g, "")
-          //     .replace(",", ".");
-          //   //const monto = valorDolares.replace(/u\$d/i, "").trim();
-          //   const puto = contado.dolares;
-          //   const monto = puto.replace("U$D ", ""); //contado; //contado.replace(/u\$d/i, "").trim();
-          //   valorDolares = await ConvertirApesos(monto);
-          // }
-          // // console.log({
-          // //   pesos: valorPesos,
-          // //   dolares: valorDolares,
-          // // });
-          // console.log(valorPesos);
-          // const limpio = textoContado.replace(/\./g, "").replace(",", ".");
-          // console.log(limpio);
-          //const monto = valorDolares.replace(/u\$d/i, "").trim();
-          //const montoPesos = await ConvertirApesos(monto);
 
           texto = `
             Precio Contado en Pesos:<br>${contado.pesos}<br>
@@ -228,7 +135,7 @@ async function cargarTerrenos() {
       //console.log(texto);
       item.innerHTML = `
         <div class="tituloImg">
-          <div class="titulo">
+          <div class="titulo" title="Haga click en el título para más información">
             <h4>
               <a href="detalles.html?id=${num}" target="_blank">${t.titulo.toLowerCase()}</a>
             </h4>
@@ -238,11 +145,15 @@ async function cargarTerrenos() {
           </div>
           <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
               <img src="images/ubicacion2.avif">
-              <p>Ver ubicación</p>
+              <p class="textoUbicacion">${textoBtnUbicacion}</p>
           </a>
       </div>
       <div class="content">
           <!-- <h4>${t.titulo}</h4> -->
+          <div class="imgFlotante">
+            <img id="imagen-flotante" src="${imgInfo}" >
+            <span class="texto-flotante">Haga click en el título para más información</span>
+          </div>
           
 
           <ul>
@@ -263,7 +174,7 @@ async function cargarTerrenos() {
 
           <!-- <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
               <img src="images/ubicacion2.avif">
-              <p>Ver ubicación</p>
+              <p>${textoBtnUbicacion}</p>
           </a> -->
       </div>
     `;
@@ -276,222 +187,222 @@ async function cargarTerrenos() {
   }
 }
 
-async function cargarTerrenosl() {
-  try {
-    const respuesta = await fetch("data/terrenos.json");
-    const terrenos = await respuesta.json();
+// async function cargarTerrenosl() {
+//   try {
+//     const respuesta = await fetch("data/terrenos.json");
+//     const terrenos = await respuesta.json();
 
-    const contenedor = document.getElementById("lista-terrenos");
-    contenedor.innerHTML = ""; // Limpiar lista
+//     const contenedor = document.getElementById("lista-terrenos");
+//     contenedor.innerHTML = ""; // Limpiar lista
 
-    //let num = 0;
-    for (const t of terrenos) {
-      const coords = extraerCoordenadas(t.ubicacion);
+//     //let num = 0;
+//     for (const t of terrenos) {
+//       const coords = extraerCoordenadas(t.ubicacion);
 
-      const item = document.createElement("div");
-      num++;
-      item.classList.add(`item`);
-      item.id = `item-${num}`;
-      //item.style.display = "flex";
-      //console.log(num);
+//       const item = document.createElement("div");
+//       num++;
+//       item.classList.add(`item`);
+//       item.id = `item-${num}`;
+//       //item.style.display = "flex";
+//       //console.log(num);
 
-      // ------------------------------------------------------
-      // Cargar imágenes desde carpeta de coordenadas
-      // ------------------------------------------------------
-      let imagenes = [];
-      //let htmlImagenes = "";
-      let index1 = 0;
-      // if (coords) {
-      //   const carpetaLat = String(coords.lat).replace(".", "-");
-      //   const basePath = `terrenos/${carpetaLat}/`;
+//       // ------------------------------------------------------
+//       // Cargar imágenes desde carpeta de coordenadas
+//       // ------------------------------------------------------
+//       let imagenes = [];
+//       //let htmlImagenes = "";
+//       let index1 = 0;
+//       // if (coords) {
+//       //   const carpetaLat = String(coords.lat).replace(".", "-");
+//       //   const basePath = `terrenos/${carpetaLat}/`;
 
-      //   let index = 1;
-      //   let sigue = true;
+//       //   let index = 1;
+//       //   let sigue = true;
 
-      //   while (sigue) {
-      //     const ruta = `${basePath}${index}.avif`;
-      //     try {
-      //       const resp = await fetch(ruta);
-      //       if (resp.ok) {
-      //         htmlImagenes += `<img src="${ruta}" class="foto-terreno" alt="Terreno">`;
-      //         imagenes.push(ruta);
-      //         index++;
-      //       } else {
-      //         sigue = false;
-      //       }
-      //     } catch (e) {
-      //       sigue = false;
-      //     }
-      //   }
-      // }
-      if (coords) {
-        // Convertir LAT decimal a formato carpeta: 38.880071 → 38-880071
-        const carpetaLat = String(coords.lat).replace(".", "-");
+//       //   while (sigue) {
+//       //     const ruta = `${basePath}${index}.avif`;
+//       //     try {
+//       //       const resp = await fetch(ruta);
+//       //       if (resp.ok) {
+//       //         htmlImagenes += `<img src="${ruta}" class="foto-terreno" alt="Terreno">`;
+//       //         imagenes.push(ruta);
+//       //         index++;
+//       //       } else {
+//       //         sigue = false;
+//       //       }
+//       //     } catch (e) {
+//       //       sigue = false;
+//       //     }
+//       //   }
+//       // }
+//       if (coords) {
+//         // Convertir LAT decimal a formato carpeta: 38.880071 → 38-880071
+//         const carpetaLat = String(coords.lat).replace(".", "-");
 
-        // Ruta dinámica
-        rutaImagen = `terrenos/${carpetaLat}/1.avif`;
-      }
-      //index1 = imagenes.length;
+//         // Ruta dinámica
+//         rutaImagen = `terrenos/${carpetaLat}/1.avif`;
+//       }
+//       //index1 = imagenes.length;
 
-      const filas = [...document.querySelectorAll(".item .imagen")];
-      //if (imagenes.length === 0) {
-      //htmlImagenes = `<img src="img/noimage.jpg" class="foto-terreno" alt="Terreno">`;
-      //console.log(filas);
-      //} else {
-      //htmlImagenes += `<img src="${imagenes}" class="foto-terreno" alt="Terreno">`;
-      htmlImagenes = `<img src="${rutaImagen}" alt="Terreno" />`;
-      //htmlImagenes = `<img src="img/noimage.jpg" class="foto-terreno" alt="Terreno">`;
-      // htmlImagenes = imagenes
-      //   .map(
-      //     (img, idx) =>
-      //       `<img src="${img}" class="foto-terreno-${idx}" alt="Terreno">`
-      //   )
-      //   .join("");
-      // htmlImagenes = imagenes
-      //   .map((img, idx) => {
-      //     return `<img src="${img}" class="foto-terreno-${idx}" alt="Terreno">`;
-      //   })
-      //   .join("");
-      //const todo = htmlImagenes.querySelector(`.foto-terreno-${idx}`);
-      //console.log(imagenes.length);
-      //}
+//       const filas = [...document.querySelectorAll(".item .imagen")];
+//       //if (imagenes.length === 0) {
+//       //htmlImagenes = `<img src="img/noimage.jpg" class="foto-terreno" alt="Terreno">`;
+//       //console.log(filas);
+//       //} else {
+//       //htmlImagenes += `<img src="${imagenes}" class="foto-terreno" alt="Terreno">`;
+//       htmlImagenes = `<img src="${rutaImagen}" alt="Terreno" />`;
+//       //htmlImagenes = `<img src="img/noimage.jpg" class="foto-terreno" alt="Terreno">`;
+//       // htmlImagenes = imagenes
+//       //   .map(
+//       //     (img, idx) =>
+//       //       `<img src="${img}" class="foto-terreno-${idx}" alt="Terreno">`
+//       //   )
+//       //   .join("");
+//       // htmlImagenes = imagenes
+//       //   .map((img, idx) => {
+//       //     return `<img src="${img}" class="foto-terreno-${idx}" alt="Terreno">`;
+//       //   })
+//       //   .join("");
+//       //const todo = htmlImagenes.querySelector(`.foto-terreno-${idx}`);
+//       //console.log(imagenes.length);
+//       //}
 
-      // ------------------------------------------------------
-      // FINANCIACIÓN Y CONTADO
-      // ------------------------------------------------------
-      const financiamiento = obtenerFinanciacion(t.detalle);
-      const contado = obtenerPrecioContado(t.detalle);
+//       // ------------------------------------------------------
+//       // FINANCIACIÓN Y CONTADO
+//       // ------------------------------------------------------
+//       const financiamiento = obtenerFinanciacion(t.detalle);
+//       const contado = obtenerPrecioContado(t.detalle);
 
-      let texto = "";
-      let esDolar = false;
+//       let texto = "";
+//       let esDolar = false;
 
-      if (contado) {
-        esDolar = contado.includes("U$D");
+//       if (contado) {
+//         esDolar = contado.includes("U$D");
 
-        if (esDolar) {
-          const monto = contado.replace("U$D", "").trim();
-          const montoPesos = await ConvertirApesos(monto);
+//         if (esDolar) {
+//           const monto = contado.replace("U$D", "").trim();
+//           const montoPesos = await ConvertirApesos(monto);
 
-          texto = `
-              Precio Contado en Dólares:<br>${contado.toLowerCase()}<br>
-              Precio Contado en Pesos (convertido):<br>$ ${montoPesos.toLocaleString()}
-            `;
-        } else {
-          texto = `Precio Contado en Pesos:<br>${contado.toLowerCase()}`;
-        }
-      }
+//           texto = `
+//               Precio Contado en Dólares:<br>${contado.toLowerCase()}<br>
+//               Precio Contado en Pesos (convertido):<br>$ ${montoPesos.toLocaleString()}
+//             `;
+//         } else {
+//           texto = `Precio Contado en Pesos:<br>${contado.toLowerCase()}`;
+//         }
+//       }
 
-      // ------------------------------------------------------
-      // ARMADO DEL CONTENIDO
-      // ------------------------------------------------------
-      const htmlContent = `
-          <div class="content">
-              <!-- <h4>${t.titulo}</h4> -->
-              <h4>
-                <a href="detalles.html?id=${num}" target="_blank">${
-        t.titulo
-      }</a>
-              </h4>
-  
-              <ul>
-                <li><p>Medida:<br>${t.medida.toLowerCase()}</p></li>
-  
-                <li><p>Descripción:<br>${t.detalle.toLowerCase()}</p></li>
-  
-                ${
-                  financiamiento
-                    ? `<li><p>Financiación:<br>${financiamiento
-                        .replace(/\n/g, "<br>")
-                        .toLowerCase()}</p></li>`
-                    : ""
-                }
-  
-                ${contado ? `<li><p>${texto}</p></li>` : ""}
-              </ul>
-  
-              <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
-                  <img src="images/ubicacion2.avif">
-                  <p>Ver ubicación</p>
-              </a>
-          </div>
-        `;
+//       // ------------------------------------------------------
+//       // ARMADO DEL CONTENIDO
+//       // ------------------------------------------------------
+//       const htmlContent = `
+//           <div class="content">
+//               <!-- <h4>${t.titulo}</h4> -->
+//               <h4>
+//                 <a href="detalles.html?id=${num}" target="_blank">${
+//         t.titulo
+//       }</a>
+//               </h4>
 
-      const htmlImagenesWrapper = `<div class="imagen">${htmlImagenes}</div>`;
+//               <ul>
+//                 <li><p>Medida:<br>${t.medida.toLowerCase()}</p></li>
 
-      // ------------------------------------------------------
-      // ORDEN DINÁMICO SEGÚN CANTIDAD DE IMÁGENES
-      // ------------------------------------------------------
-      if (imagenes.length > 10) {
-        // Content primero → Imágenes después
-        item.innerHTML = htmlContent + htmlImagenesWrapper;
-        item.style.flexDirection = "column";
-        //item.style.gridTemplateColumns = "repeat(5, 140px)";
-        const total = item.querySelectorAll(".imagen img");
-        const contenedorImg = item.querySelector(".imagen");
-        const contenedorContent = item.querySelector(".content");
-        if (total.length > 1) {
-          total.forEach((img, idx) => {
-            // img.style.width = "200px";
-            img.style.width = "auto";
-            img.style.margin = "auto";
-            img.style.height = "100%";
-            img.style.left = "0";
-            img.style.right = "0";
-            contenedorImg.style.display = "grid";
-            contenedorImg.style.gridTemplateColumns = "repeat(5, 140px)";
-            contenedorImg.style.width = "100%";
-            contenedorImg.style.height = "100%";
-            contenedorImg.style.marginTop = "5px";
-            contenedorContent.style.width = "100%";
-            //contenedorImg.style.justifyContent = "center";
-            contenedorImg.style.justifyContent = "space-evenly";
-            contenedorImg.style.alignItems = "center";
-            //console.log(contenedorImg);
-            //console.log(idx);
-          });
-        }
-        //console.log(total.length);
-        //console.log(document.querySelectorAll(".imagen img").length);
-        //console.log(item.querySelectorAll(".imagen img"));
-        //console.log(filas);
-        // const img = document.querySelectorAll(".imagen");
-        // const contenido = document.querySelectorAll(".content");
-        // img[1].style.display = "flex";
-        // contenido[1].style.width = "";
-        // const fotoTerreno = document.querySelectorAll(".imagen img");
-        // fotoTerreno.forEach((img, idx) => {
-        //   console.log(idx);
-        //   img.style.width = "200px";
-        // });
-      } else {
-        // Imagen primero → Content después
-        item.innerHTML = htmlImagenesWrapper + htmlContent;
-      }
+//                 <li><p>Descripción:<br>${t.detalle.toLowerCase()}</p></li>
 
-      contenedor.appendChild(item);
-      //const img = document.querySelectorAll(".imagen");
-      //const contenido = document.querySelectorAll(".content");
-      //const fotoTerreno = document.querySelectorAll(".foto-terreno");
-      //console.log(img[1]);
-      //   if (imagenes.length > 1) {
-      //     if (plataforma.includes("Win")) {
-      //       img[1].style.display = "grid";
-      //       img[1].style.width = "auto";
-      //       img[1].style.gridTemplateColumns = "repeat(5, 140px)";
-      //       contenido[1].style.width = "auto";
-      //       //fotoTerreno[1].style.width = "200px";
-      //     }
-      //     // fotoTerreno.forEach((img) => {
-      //     //   img.style.width = "200px";
-      //     // });
-      //     //fotoTerreno.style.width = "200px";
-      //     //document.querySelector(".imagen").style.display = "flex";
-      //   }
-    }
-  } catch (err) {
-    console.error("Error al cargar terrenos:", err);
-  }
-}
+//                 ${
+//                   financiamiento
+//                     ? `<li><p>Financiación:<br>${financiamiento
+//                         .replace(/\n/g, "<br>")
+//                         .toLowerCase()}</p></li>`
+//                     : ""
+//                 }
+
+//                 ${contado ? `<li><p>${texto}</p></li>` : ""}
+//               </ul>
+
+//               <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
+//                   <img src="images/ubicacion2.avif">
+//                   <p>Ver ubicación</p>
+//               </a>
+//           </div>
+//         `;
+
+//       const htmlImagenesWrapper = `<div class="imagen">${htmlImagenes}</div>`;
+
+//       // ------------------------------------------------------
+//       // ORDEN DINÁMICO SEGÚN CANTIDAD DE IMÁGENES
+//       // ------------------------------------------------------
+//       if (imagenes.length > 10) {
+//         // Content primero → Imágenes después
+//         item.innerHTML = htmlContent + htmlImagenesWrapper;
+//         item.style.flexDirection = "column";
+//         //item.style.gridTemplateColumns = "repeat(5, 140px)";
+//         const total = item.querySelectorAll(".imagen img");
+//         const contenedorImg = item.querySelector(".imagen");
+//         const contenedorContent = item.querySelector(".content");
+//         if (total.length > 1) {
+//           total.forEach((img, idx) => {
+//             // img.style.width = "200px";
+//             img.style.width = "auto";
+//             img.style.margin = "auto";
+//             img.style.height = "100%";
+//             img.style.left = "0";
+//             img.style.right = "0";
+//             contenedorImg.style.display = "grid";
+//             contenedorImg.style.gridTemplateColumns = "repeat(5, 140px)";
+//             contenedorImg.style.width = "100%";
+//             contenedorImg.style.height = "100%";
+//             contenedorImg.style.marginTop = "5px";
+//             contenedorContent.style.width = "100%";
+//             //contenedorImg.style.justifyContent = "center";
+//             contenedorImg.style.justifyContent = "space-evenly";
+//             contenedorImg.style.alignItems = "center";
+//             //console.log(contenedorImg);
+//             //console.log(idx);
+//           });
+//         }
+//         //console.log(total.length);
+//         //console.log(document.querySelectorAll(".imagen img").length);
+//         //console.log(item.querySelectorAll(".imagen img"));
+//         //console.log(filas);
+//         // const img = document.querySelectorAll(".imagen");
+//         // const contenido = document.querySelectorAll(".content");
+//         // img[1].style.display = "flex";
+//         // contenido[1].style.width = "";
+//         // const fotoTerreno = document.querySelectorAll(".imagen img");
+//         // fotoTerreno.forEach((img, idx) => {
+//         //   console.log(idx);
+//         //   img.style.width = "200px";
+//         // });
+//       } else {
+//         // Imagen primero → Content después
+//         item.innerHTML = htmlImagenesWrapper + htmlContent;
+//       }
+
+//       contenedor.appendChild(item);
+//       //const img = document.querySelectorAll(".imagen");
+//       //const contenido = document.querySelectorAll(".content");
+//       //const fotoTerreno = document.querySelectorAll(".foto-terreno");
+//       //console.log(img[1]);
+//       //   if (imagenes.length > 1) {
+//       //     if (plataforma.includes("Win")) {
+//       //       img[1].style.display = "grid";
+//       //       img[1].style.width = "auto";
+//       //       img[1].style.gridTemplateColumns = "repeat(5, 140px)";
+//       //       contenido[1].style.width = "auto";
+//       //       //fotoTerreno[1].style.width = "200px";
+//       //     }
+//       //     // fotoTerreno.forEach((img) => {
+//       //     //   img.style.width = "200px";
+//       //     // });
+//       //     //fotoTerreno.style.width = "200px";
+//       //     //document.querySelector(".imagen").style.display = "flex";
+//       //   }
+//     }
+//   } catch (err) {
+//     console.error("Error al cargar terrenos:", err);
+//   }
+// }
 
 // Detectar coordenadas dentro de un link de Google Maps
 function extraerCoordenadas(url) {
@@ -771,7 +682,7 @@ function obtenerPrecioContado(texto) {
   for (const m of encontrados) {
     const raw = m[0];
     const moneda = detectarMoneda(raw);
-    console.log(raw);
+    //console.log(raw);
 
     // limpiar el número
     const numero = raw.replace(/[^\d\.]/g, "");
@@ -873,9 +784,9 @@ function obtenerPrecioContado2(texto) {
       lower.includes("usd") ||
       lower.includes("u$d") ||
       lower.includes("u$s");
-    console.log(`dolar ${esDolares}`);
-    console.log(`peso ${esPesos}`);
-    console.log(`valor ${valor}`);
+    //console.log(`dolar ${esDolares}`);
+    //console.log(`peso ${esPesos}`);
+    //console.log(`valor ${valor}`);
 
     if (esPesos && !esDolares) return `$ ${valor}`;
     if (esDolares && !esPesos) return `U$D ${valor}`;
@@ -952,7 +863,7 @@ async function cargarInformacion() {
     // 1) Cargar JSON (puede ser local o remoto)
     const resp = await fetch("data/informacion.json");
     const data = await resp.json();
-    console.log(data);
+    //console.log(data);
 
     // 2) Seleccionar el contenedor
     const contenedor = document.querySelector(".destacados");
