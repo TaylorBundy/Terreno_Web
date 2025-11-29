@@ -125,7 +125,7 @@ async function cargarTerrenos() {
           t.titulo +
           "\nVer más: " +
           window.location.host +
-          "/Proyectos/Venta_Terrenos/detalles.html?id=" +
+          "/Terreno_Web/detalles.html?id=" +
           num
       )}" target="_blank"><img id="imagen-flotante" src="${imgInfo}" ></a>
             <span class="texto-flotante">Haga click en el título para más información<br>Presione aquí para contactarse con un vendedor.!</span>
