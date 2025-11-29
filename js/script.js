@@ -14,6 +14,11 @@ let htmlImagenes = "";
 let estupido;
 let textoBtnUbicacion;
 let imgInfo;
+let imgInfo2;
+const whatsapp = document.querySelector("#imagen-flotante");
+const numero = "+5492995933317";
+const url = `https://wa.me/${encodeURIComponent(numero)}`;
+//https://api.whatsapp.com/send?phone=+5492995933317&text=esto
 
 window.onload = function () {
   console.log(plataforma);
@@ -21,7 +26,8 @@ window.onload = function () {
     textoBtnUbicacion = "hhh ";
     const imagen = document.querySelector(".imgFlotante"); //.style.display = "none";
     console.log(imagen);
-    imgInfo = "images/info.avif";
+    //imgInfo = "images/info.avif";
+    imgInfo = "images/whatsapp.avif";
     // Logo.forEach(logo => {
     //   logo.setAttribute('src', 'favicon.ico');
     // });
@@ -30,6 +36,7 @@ window.onload = function () {
   } else if (plataforma.includes("Win")) {
     textoBtnUbicacion = "Ver ubicación";
     imgInfo = "images/left.avif";
+    imgInfo2 = "images/whatsapp.avif";
   }
 };
 
@@ -151,9 +158,12 @@ async function cargarTerrenos() {
       <div class="content">
           <!-- <h4>${t.titulo}</h4> -->
           <div class="imgFlotante">
-            <img id="imagen-flotante" src="${imgInfo}" >
+            <a href="${url}?text=Quiero más información sobre: ${t.titulo.toLowerCase()}" target="_blank"><img id="imagen-flotante" src="${imgInfo}" ></a>
             <span class="texto-flotante">Haga click en el título para más información</span>
           </div>
+          <!-- <div class="imgFlotante2">
+            <img id="imagen-flotante2" src="${imgInfo2}" >
+          </div> --> 
           
 
           <ul>
