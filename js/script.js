@@ -21,11 +21,11 @@ const url = `https://wa.me/${encodeURIComponent(numero)}`;
 //https://api.whatsapp.com/send?phone=+5492995933317&text=esto
 
 window.onload = function () {
-  console.log(plataforma);
+  //console.log(plataforma);
   if (plataforma.includes("Android")) {
     textoBtnUbicacion = "hhh ";
-    const imagen = document.querySelector(".imgFlotante"); //.style.display = "none";
-    console.log(imagen);
+    //const imagen = document.querySelector(".imgFlotante"); //.style.display = "none";
+    //console.log(imagen);
     //imgInfo = "images/info.avif";
     imgInfo = "images/whatsapp.avif";
   } else if (plataforma.includes("Win")) {
@@ -248,7 +248,7 @@ document.addEventListener("click", function (e) {
     const img = e.target;
     const contenedor = img.closest(".imagen"); // 📌 Contenedor de la imagen
     const texto = contenedor.querySelector("p");
-    console.log(texto);
+    //console.log(texto);
 
     // Si NO está en zoom → activarlo
     if (!img.classList.contains("img-zoom")) {
