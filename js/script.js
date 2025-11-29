@@ -113,7 +113,11 @@ async function cargarTerrenos() {
             </h4>
           </div>
           <div class="imagen">
+            <div class="TextoImagen">
             <img src="${rutaImagen}" alt="Terreno" />
+              <p class="titulo-zoom">${t.titulo.toLowerCase()}</p>
+            </div>
+            <!-- <img src="${rutaImagen}" alt="Terreno" /> -->
           </div>
           <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
               <img src="images/ubicacion2.avif">
@@ -242,15 +246,20 @@ document.addEventListener("click", function (e) {
   // Solo si clickeaste una imagen dentro de un terreno
   if (e.target.tagName === "IMG" && e.target.closest(".imagen")) {
     const img = e.target;
+    const contenedor = img.closest(".imagen"); // 📌 Contenedor de la imagen
+    const texto = contenedor.querySelector("p");
+    console.log(texto);
 
     // Si NO está en zoom → activarlo
     if (!img.classList.contains("img-zoom")) {
       img.classList.add("img-zoom");
       img.style.cursor = "zoom-out";
+      texto.classList.add("active");
     } else {
       // Si ya está en zoom → salir
       img.classList.remove("img-zoom");
       img.style.cursor = "zoom-in";
+      texto.classList.remove("active");
     }
   }
 });
@@ -385,115 +394,6 @@ function obtenerPrecioContado(texto) {
 
   return null;
 }
-
-// function obtenerPrecioContado2(texto) {
-//   if (!texto) return null;
-
-//   const lower = texto.toLowerCase();
-//   const indiceContado1 = lower.indexOf("contado");
-//   // Buscar "contado" o "valor"
-//   const idxContado = lower.indexOf("contado");
-//   const idxValor = lower.indexOf("valor");
-//   let indiceContado = -1;
-//   let palabraClave = null;
-//   //if (indiceContado === -1) return null;
-
-//   if (idxContado !== -1 && idxValor !== -1) {
-//     if (idxContado < idxValor) {
-//       indiceContado = idxContado;
-//       palabraClave = "contado";
-//     } else {
-//       indiceContado = idxValor;
-//       palabraClave = "valor";
-//     }
-//   } else if (idxContado !== -1) {
-//     indiceContado = idxContado;
-//     palabraClave = "contado";
-//   } else if (idxValor !== -1) {
-//     indiceContado = idxValor;
-//     palabraClave = "valor";
-//   }
-//   //console.log(indiceContado);
-//   if (indiceContado === -1) return null;
-
-//   // -----------------------------------------------------------------
-//   // FUNCIÓN EXTRA: determina si un valor es PESOS o DÓLARES
-//   // + Si ya tiene $ o U$D, NO agrega nada
-//   // -----------------------------------------------------------------
-//   function formatearValor(valor, texto) {
-//     if (!valor) return null;
-
-//     // Si ya contiene un símbolo → NO modificar
-//     if (/\$|u\$d/i.test(valor)) {
-//       return valor.replace("$", "$ ");
-//     }
-
-//     const lower = texto.toLowerCase();
-
-//     const esPesos =
-//       lower.includes("pesos") ||
-//       lower.includes("peso") ||
-//       lower.includes("$") ||
-//       lower.includes("ars");
-
-//     const esDolares =
-//       lower.includes("dolar") ||
-//       lower.includes("dolares") ||
-//       lower.includes("dólar") ||
-//       lower.includes("usd") ||
-//       lower.includes("u$d") ||
-//       lower.includes("u$s");
-
-//     if (esPesos && !esDolares) return `$ ${valor}`;
-//     if (esDolares && !esPesos) return `U$D ${valor}`;
-
-//     // Si menciona ambos, elegimos el más cercano al valor
-//     const idxValor = texto.indexOf(valor);
-//     const idxPeso = lower.indexOf("pesos");
-//     const idxDolar = lower.indexOf("dolares");
-
-//     const distPeso = Math.abs(idxValor - idxPeso);
-//     const distDolar = Math.abs(idxValor - idxDolar);
-
-//     if (distPeso < distDolar) return `$ ${valor}`;
-//     else return `U$D ${valor}`;
-//   }
-
-//   // -----------------------------------------------------------------
-//   // 1) Buscar hacia adelante (primeras 2 palabras)
-//   // -----------------------------------------------------------------
-//   //const posterior = texto.substring(indiceContado + "contado".length).trim();
-//   const posterior = texto.substring(indiceContado + palabraClave.length).trim();
-//   const palabras = posterior.split(/\s+/).slice(0, 2);
-
-//   const contieneNumero = (str) => /\d/.test(str);
-
-//   const hayNumeroAdelante = palabras.some(contieneNumero);
-
-//   if (hayNumeroAdelante) {
-//     const numero = palabras.find(contieneNumero);
-//     return formatearValor(numero, texto);
-//   }
-
-//   // -----------------------------------------------------------------
-//   // 2) Si NO hay número adelante → buscar hacia atrás
-//   //    nnnnn o nn.nn.nn o 20000 o 20.000.000 etc.
-//   // -----------------------------------------------------------------
-//   const regexNumero = /(\d[\d\.]{4,})/g;
-//   const coincidencias = [...texto.matchAll(regexNumero)];
-
-//   if (coincidencias.length > 0) {
-//     let ultimoNumeroAntes = null;
-
-//     for (const c of coincidencias) {
-//       if (c.index < indiceContado) ultimoNumeroAntes = c[0];
-//     }
-
-//     return ultimoNumeroAntes ? formatearValor(ultimoNumeroAntes, texto) : null;
-//   }
-
-//   return null;
-// }
 
 async function ConvertirApesos(importe) {
   const options = {method: "GET", headers: {accept: "application/json"}};
