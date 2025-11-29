@@ -35,6 +35,9 @@ window.onload = function () {
   }
 };
 
+const params = new URLSearchParams(window.location.search);
+const mostrarID = params.get("id"); // ej: "7"
+
 // Cargar dinámicamente los terrenos desde terrenos.json
 async function cargarTerrenos() {
   try {
@@ -50,8 +53,9 @@ async function cargarTerrenos() {
       //console.log("Coordenadas detectadas:", coords);
 
       const item = document.createElement("div");
-      item.classList.add("item");
+      item.classList.add(`item`);
       num++;
+      item.id = `item-${num}`;
       // Si detectamos coordenadas → generar carpeta dinámica
       let rutaImagen = "img/noimage.jpg"; // fallback
       if (coords) {
@@ -63,8 +67,8 @@ async function cargarTerrenos() {
       const financiamiento = obtenerFinanciacion(t.detalle);
       const contado = obtenerPrecioContado(t.detalle);
       let texto = "";
-      let esDolar = false;
-      let esPesos = false;
+      //let esDolar = false;
+      //let esPesos = false;
       const lower = t.detalle.toLowerCase();
       if (contado) {
         // Detecta por el texto completo del terreno
@@ -125,15 +129,13 @@ async function cargarTerrenos() {
           t.titulo +
           "\nVer más: " +
           window.location.host +
-          "/Terreno_Web/detalles.html?id=" +
+          "/Terreno_Web/index.html?id=" +
+          num +
+          "#item-" +
           num
       )}" target="_blank"><img id="imagen-flotante" src="${imgInfo}" ></a>
             <span class="texto-flotante">Haga click en el título para más información<br>Presione aquí para contactarse con un vendedor.!</span>
           </div>
-          <!-- <div class="imgFlotante2">
-            <img id="imagen-flotante2" src="${imgInfo2}" >
-          </div> --> 
-          
 
           <ul>
             <li><p>Medida:<br>${t.medida.toLowerCase()}</p></li>
@@ -150,16 +152,22 @@ async function cargarTerrenos() {
 
             <li><p>${texto}</p></li>
           </ul>
-
-          <!-- <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
-              <img src="images/ubicacion2.avif">
-              <p>${textoBtnUbicacion}</p>
-          </a> -->
       </div>
     `;
 
       contenedor.appendChild(item);
       //});
+    }
+    // Después que se terminan de cargar todos los terrenos
+    if (mostrarID) {
+      setTimeout(() => {
+        const elemento = document.getElementById("item-" + mostrarID);
+
+        if (elemento) {
+          elemento.scrollIntoView({behavior: "smooth", block: "start"});
+          elemento.classList.add("resaltado");
+        }
+      }, 200); // pequeño delay para asegurar que se renderizó
     }
   } catch (err) {
     console.error("Error al cargar terrenos:", err);
