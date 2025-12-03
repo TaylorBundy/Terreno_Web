@@ -19,9 +19,6 @@ const whatsapp = document.querySelector("#imagen-flotante");
 const numero = "+5492995933317";
 const url = `https://wa.me/${encodeURIComponent(numero)}`;
 //https://api.whatsapp.com/send?phone=+5492995933317&text=esto
-const urlJSON =
-  "https://drive.google.com/uc?export=download&id=1zjkNZVr-lyQ3CVVFA1HodNlYI5Ucg0Xq";
-//"https://drive.google.com/file/d/1zjkNZVr-lyQ3CVVFA1HodNlYI5Ucg0Xq/view?usp=sharing";
 
 window.onload = function () {
   //console.log(plataforma);
@@ -44,8 +41,7 @@ const mostrarID = params.get("id"); // ej: "7"
 // Cargar dinámicamente los terrenos desde terrenos.json
 async function cargarTerrenos() {
   try {
-    //const respuesta = await fetch("data/terrenos.json");
-    const respuesta = await fetch(urlJSON);
+    const respuesta = await fetch("data/terrenos.json");
     const terrenos = await respuesta.json();
 
     const contenedor = document.getElementById("lista-terrenos");
