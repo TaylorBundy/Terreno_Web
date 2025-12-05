@@ -400,7 +400,7 @@ async function ConvertirApesos(importe) {
   const valor = importe.replace(".", "");
   try {
     const resp = await fetch(
-      `https://api.fastforex.io/convert?from=USD&to=ARS&amount=${valor}&api_key=53f03dc89e-3ac874c308-t6aaw0`,
+      `https://api.fastforex.io/convert?from=USD&to=ARS&amount=${valor}&api_key=218277a470-b9c96e1946-t6s12t`,
       options
     );
     data = await resp.json();
