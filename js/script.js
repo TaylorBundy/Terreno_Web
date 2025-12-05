@@ -94,7 +94,8 @@ async function cargarTerrenos() {
           if (esDolar) {
             const puto = contado.dolares;
             const monto = puto.replace("U$D ", ""); //contado; //contado.replace(/u\$d/i, "").trim();
-            valorDolares = await ConvertirApesos(monto);
+            //valorDolares = await ConvertirApesos(monto);
+            valorDolares = null;
           }
 
           texto = `
