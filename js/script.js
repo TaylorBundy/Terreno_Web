@@ -83,8 +83,8 @@ async function cargarTerrenos() {
           // Dólares → convertir a pesos
           const puto = contado.dolares;
           const monto = puto.replace("U$D ", ""); //contado; //contado.replace(/u\$d/i, "").trim();
-          //const montoPesos = await ConvertirApesos(monto);
-          const montoPesos = monto;
+          const montoPesos = await ConvertirApesos(monto);
+          //const montoPesos = monto;
 
           texto = `
             <!-- Precio Contado en Dólares:<br>${contado.dolares}<br> -->
@@ -99,8 +99,8 @@ async function cargarTerrenos() {
           if (esDolar) {
             const puto = contado.dolares;
             const monto = puto.replace("U$D ", ""); //contado; //contado.replace(/u\$d/i, "").trim();
-            //valorDolares = await ConvertirApesos(monto);
-            valorDolares = 00000;
+            valorDolares = await ConvertirApesos(monto);
+            //valorDolares = 00000;
           }
 
           texto = `
