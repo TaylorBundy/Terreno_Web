@@ -1,3 +1,9 @@
+const plataforma = navigator.userAgent;
+let textoBtnUbicacion;
+const whatsapp = document.querySelector("#imagen-flotante");
+const numero = "+5492995933317";
+const url = `https://wa.me/${encodeURIComponent(numero)}`;
+let num;
 async function cargarDetalle() {
   const params = new URLSearchParams(window.location.search);
   const id = parseInt(params.get("id")) - 1;
@@ -100,6 +106,9 @@ async function cargarDetalle() {
   if (imagenes.length === 0) {
     imagenes = ["img/noimage.jpg"];
   }
+  //console.log(window.location.href.split("="));
+  num = window.location.href.split("=")[1];
+  console.log(num);
 
   // ------ Armar modal ------
   const modal = document.getElementById("modal");
@@ -107,9 +116,26 @@ async function cargarDetalle() {
         <h2>${t.titulo}</h2>
         <p><b>Medida:</b> ${t.medida}</p>
         <p><b>Descripción:</b><br>${t.detalle}</p>
-        <p><a href="${
+        <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
+              <img src="images/ubicacion2.avif">
+              <p title="Click para ver la ubicación" class="textoUbicacion">${textoBtnUbicacion}</p>
+          </a>
+          <div class="imgFlotante">
+          <a href="${url}?text=${encodeURIComponent(
+    "Quiero más información sobre: " +
+      t.titulo +
+      "\nVer más: " +
+      window.location.host +
+      "/Terreno_Web/index.html?id=" +
+      num +
+      "#item-" +
+      num
+  )}" target="_blank"><img id="imagen-flotante" src="${imgInfo}" ></a>
+  <p title="Click para ver la ubicación" class="textoUbicacion">Contactar Vendedor</p>
+  </div>
+        <!-- <p><a href="${
           t.ubicacion
-        }" target="_blank" style="color:#4af;">Ver ubicación en Google Maps</a></p>
+        }" target="_blank" style="color:#4af;">Ver ubicación en Google Maps</a></p> -->
 
         <h3>Imágenes</h3>
         <div class="imagen2">
@@ -121,10 +147,35 @@ async function cargarDetalle() {
     `;
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
+//document.addEventListener("DOMContentLoaded", () => {
+// window.onload = function () {
 //   const todos = document.querySelectorAll(".TextoImagen2 img");
 //   console.log(todos);
-// });
+// };
+
+window.onload = () => {
+  cargarDetalle();
+  if (plataforma.includes("Android")) {
+    //creaTop();
+    //}
+    //setTimeout(() => {
+    //const elemento = document.querySelector(".TextoImagen2");
+    //const imagenzoom = document.querySelector(".img-zoom2");
+    //const textoUbicacion = document.querySelector(".textoUbicacion");
+    // textoUbicacion.style.display = "none";
+    //imagenzoom.style.width = "75%";
+    //console.log("Página lista y elemento encontrado");
+    //console.log(elemento);
+    //}, 1500);
+    textoBtnUbicacion = "Ver ubicación";
+    imgInfo = "images/whatsapp.avif";
+  } else if (plataforma.includes("Win")) {
+    //creaTop();
+    textoBtnUbicacion = "Ver ubicación";
+    imgInfo = "images/left.avif";
+    imgInfo2 = "images/whatsapp.avif";
+  }
+};
 
 // REUTILIZAMOS EXACTAMENTE TU FUNCIÓN:
 function extraerCoordenadas(url) {
@@ -145,26 +196,35 @@ function extraerCoordenadas(url) {
   return null;
 }
 
-document.addEventListener("DOMContentLoaded", cargarDetalle);
+//document.addEventListener("DOMContentLoaded", cargarDetalle);
 
 document.addEventListener("click", function (e) {
   // Solo si clickeaste una imagen dentro de un terreno
   if (e.target.tagName === "IMG" && e.target.closest(".imagen2")) {
     const img = e.target;
     const contenedor = img.closest(".imagen2"); // 📌 Contenedor de la imagen
-    const texto = contenedor.querySelector("p");
-    console.log(texto);
+    //const texto = contenedor.querySelector("p");
+    //console.log(texto);
 
     // Si NO está en zoom → activarlo
     if (!img.classList.contains("img-zoom2")) {
       img.classList.add("img-zoom2");
       img.style.cursor = "zoom-out";
-      texto.classList.add("active2");
+      if (plataforma.includes("Android")) {
+        img.style.width = "40vw";
+        img.style.height = "20vh";
+      } else {
+        img.style.width = "400px";
+        img.style.height = "300px";
+      }
+      //texto.classList.add("active2");
     } else {
       // Si ya está en zoom → salir
       img.classList.remove("img-zoom2");
       img.style.cursor = "zoom-in";
-      texto.classList.remove("active2");
+      img.style.width = "300px";
+      img.style.height = "200px";
+      //texto.classList.remove("active2");
     }
   }
 });
