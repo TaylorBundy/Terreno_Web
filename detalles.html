@@ -3,37 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>Detalle del Terreno</title>
-    <link rel="stylesheet" href="css/estilos.css" />
-    <style>
-      body {
-        margin: 0;
-        font-family: Arial;
-        background: rgba(0, 0, 0, 0.85);
-      }
-      #modal {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.92);
-        color: #fff;
-        overflow-y: auto;
-        padding: 40px;
-      }
-      .imagenes {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 15px;
-        margin-top: 20px;
-      }
-      .imagenes img {
-        width: 100%;
-        height: auto;
-        border-radius: 8px;
-        cursor: zoom-in;
-      }
-      h2 {
-        margin-top: 0;
-      }
-    </style>
+    <link rel="stylesheet" href="css/detalles.css" />
+    <!-- <link rel="stylesheet" href="css/estilos.css" /> -->
   </head>
 
   <body>
@@ -64,15 +35,44 @@
 
         <!-- Menú -->
         <ul class="nav-links" id="nav-links">
-          <li><a href="#">Inicio</a></li>
-          <li><a href="#venta">Venta</a></li>
+          <li><a href="index.html">Inicio</a></li>
+          <!-- <li><a href="#venta">Venta</a></li>
           <li><a href="lotes.html">Lotes</a></li>
           <li><a href="propiedades.html">Propiedades</a></li>
-          <li><a href="contacto.html#contacto">Contacto</a></li>
+          <li><a href="contacto.html#contacto">Contacto</a></li> -->
         </ul>
       </nav>
     </header>
     <div id="modal"></div>
+    <footer id="contacto" class="footer">
+      <p>© 2025 TerrenoWeb - Venta de Lotes y Terrenos</p>
+      <div class="ImgSocial" id="AllImgSocial">
+        <a
+          href="https://www.facebook.com/profile.php?id=61584062818135"
+          target="_blank"
+        >
+          <img
+            src="images/facebook.avif"
+            class="imgsocial"
+            alt="Facebook"
+            id="facebook"
+            title="Nuestro Facebook"
+          />
+        </a>
+        <a
+          href="https://wa.me/send?phone=5492995933317&text=Hola+Juan+Carlos%21%0ANecesito+más+información+sobre+los+terrenos.%0AGracias.%21"
+          target="_blank"
+        >
+          <img
+            src="images/whatsapp.avif"
+            class="imgsocial"
+            alt="Whatsapp"
+            id="Whatsapp"
+            title="Contactar un Vendedor"
+          />
+        </a>
+      </div>
+    </footer>
 
     <script src="js/detalles.js"></script>
   </body>

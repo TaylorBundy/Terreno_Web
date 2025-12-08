@@ -198,7 +198,7 @@ body {
   align-items: center;
   background: #2e2e2e;
   padding: 20px;
-  width: 300px;
+  /* width: 300px; */
   border-radius: 10px;
   border-left: 4px solid #ff6d00;
 }
@@ -416,6 +416,30 @@ body {
   .imgFlotante:hover .texto-flotante {
     display: none;
   }
+  .top {
+    width: 100%;
+    position: fixed;
+    display: flex;
+    justify-content: right;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1000;
+  }
+  #myBtn {
+    display: none;
+    position: relative;
+    /* right: 20px; */
+    padding: 20px;
+    border: 1px solid #333;
+    border-radius: 50px;
+    background: #333333eb url("../images/top.avif") no-repeat center/cover;
+    color: white;
+    font-size: 18px;
+    z-index: 10;
+  }
+  #myBtn:hover {
+    background-color: #555;
+  }
   .header {
     width: 90%;
     margin: auto;
@@ -466,7 +490,9 @@ body {
     text-shadow: 0 2px 6px rgb(171 168 168 / 60%);
   }
   .hero-list .item img {
-    width: 300px;
+    /* width: 300px; */
+    width: 60%;
+    height: unset;
   }
   .hero-list .item .btn-ubicacion img {
     width: 16px;
@@ -496,7 +522,11 @@ body {
   }
   .imagen {
     width: auto;
+    height: unset;
     flex: auto;
+  }
+  .TextoImagen {
+    display: flex;
   }
 
   .hero-list .imagen .img-zoom {
@@ -527,7 +557,8 @@ body {
     position: unset;
   }
   .content p {
-    font-size: 12px;
+    font-size: 14px;
+    margin: 0;
   }
   .content ul {
     padding: 0 15px;
@@ -538,7 +569,7 @@ body {
     border-radius: 5px;
   }
   .content li {
-    font-size: 12px;
+    font-size: 14px;
     padding: 0;
     margin: 5px 3px;
   }
@@ -587,12 +618,28 @@ body {
     border-radius: 10px;
     margin-top: 5px;
   }
+  .card {
+    padding: 5px;
+    width: 100%;
+  }
+  .card ul {
+    padding-inline-start: 5px;
+    padding-inline-end: 5px;
+    padding-block-start: 5px;
+    padding-block-end: 5px;
+    margin-inline-start: 5px;
+    margin-inline-end: 5px;
+    margin-block-start: 5px;
+    margin-block-end: 5px;
+    border: 1px solid #444;
+    border-radius: 10px;
+  }
   .card h3 {
-    font-size: 14px;
+    font-size: 12px;
     text-shadow: 0 2px 6px rgb(171 168 168 / 60%);
   }
   .card ul li {
-    font-size: 12px;
+    font-size: 10px;
   }
   .footer {
     width: 90%;
@@ -637,5 +684,11 @@ body {
   }
   .hamburger.active span:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
+  }
+  .tarjetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 40%);
+    gap: 5px;
+    justify-content: space-evenly;
   }
 }

@@ -17,23 +17,84 @@ async function cargarDetalle() {
   const coords = extraerCoordenadas(t.ubicacion);
   let imagenes = [];
 
+  // if (coords) {
+  //   const carpetaLat = String(coords.lat).replace(".", "-");
+  //   const basePath = `terrenos/${carpetaLat}/`;
+
+  //   let index = 1;
+  //   let sigue = true;
+
+  //   while (sigue) {
+  //     const lolo = index - 1;
+
+  //     const ruta = `${basePath}${index}.avif`;
+  //     const resp = await fetch(ruta);
+  //     //console.log(resp);
+  //     if (resp.ok) {
+  //       imagenes.push(ruta);
+  //       //index += 1;
+  //       index++;
+  //       //index = index - 1;
+  //     } else {
+  //       // index = index - 1;
+  //       // console.log(index);
+  //       sigue = false;
+  //     }
+  //   }
+  // }
   if (coords) {
     const carpetaLat = String(coords.lat).replace(".", "-");
     const basePath = `terrenos/${carpetaLat}/`;
-
-    let index = 1;
-    let sigue = true;
-
-    while (sigue) {
-      const ruta = `${basePath}${index}.avif`;
-      const resp = await fetch(ruta);
-      if (resp.ok) {
-        imagenes.push(ruta);
-        index++;
-      } else {
-        sigue = false;
-      }
+    const indexData = await fetch(`${basePath}index.json`).then((r) =>
+      r.json()
+    );
+    const cantidad = indexData.cantidad;
+    //console.log(cantidad);
+    for (let i = 1; i <= cantidad; i++) {
+      imagenes.push(`${basePath}${i}.avif`);
     }
+
+    //let index = 1;
+    //let numeros;
+
+    // while (true) {
+    //   const ruta = `${basePath}${index}.avif`;
+    //   try {
+    //     const resp = await fetch(ruta, {method: "HEAD"}); // más rápido que GET
+
+    //     if (resp.ok) {
+    //       imagenes.push(ruta);
+    //       numeros = index;
+    //       index++;
+    //       //console.log(numeros);
+    //       //console.log(index);
+    //       if (numeros === index - 1) {
+    //         console.log("ya");
+    //         //break;
+    //       }
+    //     } else {
+    //       break; // no hay más → cortar
+    //     }
+    //   } catch (e) {
+    //     break; // cortar sin mostrar error
+    //   }
+    // }
+
+    // while (true) {
+    //   const ruta = `${basePath}${index}.avif`;
+
+    //   try {
+    //     const resp = await fetch(ruta, {method: "HEAD"});
+
+    //     if (!resp.ok) break; // si no existe → cortar
+
+    //     imagenes.push(ruta); // agregar imagen válida
+    //     console.log(index - 1);
+    //     index++;
+    //   } catch (e) {
+    //     break; // cortar sin mostrar error
+    //   }
+    // }
   }
 
   if (imagenes.length === 0) {
@@ -51,11 +112,19 @@ async function cargarDetalle() {
         }" target="_blank" style="color:#4af;">Ver ubicación en Google Maps</a></p>
 
         <h3>Imágenes</h3>
-        <div class="imagenes">
+        <div class="imagen2">
+        <div class="TextoImagen2">
             ${imagenes.map((img) => `<img src="${img}">`).join("")}
+            <!-- <p class="titulo-zoom2">${t.titulo.toLowerCase()}</p> -->
+            </div>
         </div>
     `;
 }
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   const todos = document.querySelectorAll(".TextoImagen2 img");
+//   console.log(todos);
+// });
 
 // REUTILIZAMOS EXACTAMENTE TU FUNCIÓN:
 function extraerCoordenadas(url) {
@@ -77,3 +146,25 @@ function extraerCoordenadas(url) {
 }
 
 document.addEventListener("DOMContentLoaded", cargarDetalle);
+
+document.addEventListener("click", function (e) {
+  // Solo si clickeaste una imagen dentro de un terreno
+  if (e.target.tagName === "IMG" && e.target.closest(".imagen2")) {
+    const img = e.target;
+    const contenedor = img.closest(".imagen2"); // 📌 Contenedor de la imagen
+    const texto = contenedor.querySelector("p");
+    console.log(texto);
+
+    // Si NO está en zoom → activarlo
+    if (!img.classList.contains("img-zoom2")) {
+      img.classList.add("img-zoom2");
+      img.style.cursor = "zoom-out";
+      texto.classList.add("active2");
+    } else {
+      // Si ya está en zoom → salir
+      img.classList.remove("img-zoom2");
+      img.style.cursor = "zoom-in";
+      texto.classList.remove("active2");
+    }
+  }
+});

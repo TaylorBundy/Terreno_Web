@@ -24,20 +24,43 @@ const url1 = `https://wa.me/send?phone=${encodeURIComponent(
 )}&text=Hola+Juan+Carlos%21%0ANecesito+más+información+sobre+los+terrenos.%0AGracias.%21`;
 //https://api.whatsapp.com/send?phone=+5492995933317&text=esto
 
+document.addEventListener("DOMContentLoaded", () => {
+  if (plataforma.includes("Android")) {
+    creaTop();
+  }
+});
+
 window.onload = function () {
   //console.log(plataforma);
   if (plataforma.includes("Android")) {
     textoBtnUbicacion = "hhh ";
+    //creaTop();
+    // window.onscroll = function () {
+    //   scrollFunction();
+    // };
     //const imagen = document.querySelector(".imgFlotante"); //.style.display = "none";
     //console.log(imagen);
     //imgInfo = "images/info.avif";
     imgInfo = "images/whatsapp.avif";
   } else if (plataforma.includes("Win")) {
+    //creaTop();
     textoBtnUbicacion = "Ver ubicación";
     imgInfo = "images/left.avif";
     imgInfo2 = "images/whatsapp.avif";
   }
 };
+
+if (plataforma.includes("Android")) {
+  setTimeout(() => {
+    //if (['index', 'Cumen-Truck', 'Menu-Cumen-Truck', 'bebidas', 'about'].some(path => window.location.pathname.includes(path))) {
+    window.onscroll = function () {
+      scrollFunction();
+      //menuVisible2();
+      //sisi();
+    };
+    //}
+  }, 500);
+}
 
 const params = new URLSearchParams(window.location.search);
 const mostrarID = params.get("id"); // ej: "7"
@@ -415,7 +438,7 @@ async function ConvertirApesos(importe) {
     let datos = await data2["rates"];
     let datos1 = await datos["ARS"];
     let divisas = valor * datos1;
-    console.log(divisas);
+    //console.log(divisas);
     // const resp = await fetch(
     //   `https://api.fastforex.io/convert?from=USD&to=ARS&amount=${valor}&api_key=53f03dc89e-3ac874c308-t6aaw0`,
     //   options
@@ -444,6 +467,9 @@ async function cargarInformacion() {
     `;
     contenedor.innerHTML = ""; // limpiar contenido actual
     contenedor.appendChild(info);
+    const tarjetas = document.createElement("div");
+    tarjetas.className = "tarjetas";
+    contenedor.appendChild(tarjetas);
 
     // 3) Generar tarjetas dinámicamente
     data.forEach((bloque) => {
@@ -457,9 +483,92 @@ async function cargarInformacion() {
         </ul>
       `;
 
-      contenedor.appendChild(card);
+      //contenedor.appendChild(card);
+      tarjetas.appendChild(card);
     });
   } catch (error) {
     console.error("Error cargando destacados:", error);
   }
+}
+let destino;
+let scrolll = "";
+const inicios = 85;
+const target = 20;
+let final = "";
+const TargetHeight = document.documentElement.offsetHeight - window.innerHeight;
+// When the user scrolls down 20px from the top of the document, show the button
+function scrollFunction() {
+  const mybutton = document.getElementById("myBtn");
+  const topp = document.querySelector(".top");
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    scrolll = window.scrollY;
+    mybutton.style.display = "block";
+    if (isBottomOfPage()) {
+      topp.style.bottom = 130 + "px";
+    } else if (
+      scrolll <=
+      Math.max(document.documentElement.scrollHeight) - window.innerHeight
+    ) {
+      final = inicios - (TargetHeight - scrolll);
+      if (final > target && final <= inicios) {
+        topp.style.bottom = Math.max(target, final) + "px";
+      } else {
+        topp.style.bottom = 20 + "px";
+      }
+    }
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+//definimos la funcion que crea el boton de top para dispositivos moviles
+function creaTop() {
+  if (window.location.pathname.includes("about")) {
+    destino = document.querySelector(".container");
+  } else {
+    destino = document.querySelector("body");
+  }
+  console.log(destino);
+  if (destino === undefined) {
+    alert("No existe el bloque destino");
+    //} else if (savedTheme.includes("styles-mobile-2")) {
+    //
+  } else {
+    var nodoTop = document.createElement("div");
+    nodoTop.className = "top";
+    destino.appendChild(nodoTop);
+    var nodo1 = document.querySelector(".top");
+    var nodoButton = document.createElement("button");
+    nodoButton.id = "myBtn";
+    nodoButton.addEventListener("click", topFunction);
+    nodo1.appendChild(nodoButton);
+  }
+}
+
+function topFunction() {
+  //const mybutton = document.getElementById("myBtn");
+  //document.body.scrollTop = 0; // For Safari
+  //document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  if ("scrollTo" in window) {
+    // Verifica si el navegador soporta scrollTo
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  } else {
+    // Fallback para navegadores más antiguos
+    let currentScroll =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (currentScroll > 0) {
+      window.requestAnimationFrame(topFunction);
+      window.scrollTo(0, currentScroll - currentScroll / 8); // Efecto suave manual
+    }
+  }
+}
+
+//funcion para determinar si llegamos al final de la pagina
+function isBottomOfPage() {
+  //return window.scrollY + window.innerHeight >= Math.round(document.documentElement.scrollHeight);
+  return (
+    window.scrollY + window.innerHeight >= document.documentElement.scrollHeight
+  );
 }
