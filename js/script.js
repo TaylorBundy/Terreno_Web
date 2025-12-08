@@ -18,6 +18,10 @@ let imgInfo2;
 const whatsapp = document.querySelector("#imagen-flotante");
 const numero = "+5492995933317";
 const url = `https://wa.me/${encodeURIComponent(numero)}`;
+//const url1 = `https://wa.me/send?phone=542995933317&text=Hola+Juan+Carlos%21+👋%0ANecesito+más+información+sobre+los+terrenos.ℹ%EF%B8%8F%0AGracias.%21😜`;
+const url1 = `https://wa.me/send?phone=${encodeURIComponent(
+  numero
+)}&text=Hola+Juan+Carlos%21%0ANecesito+más+información+sobre+los+terrenos.%0AGracias.%21`;
 //https://api.whatsapp.com/send?phone=+5492995933317&text=esto
 
 window.onload = function () {
@@ -121,7 +125,7 @@ async function cargarTerrenos() {
           </div>
           <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
               <img src="images/ubicacion2.avif">
-              <p class="textoUbicacion">${textoBtnUbicacion}</p>
+              <p title="Click para ver la ubicación" class="textoUbicacion">${textoBtnUbicacion}</p>
           </a>
       </div>
       <div class="content">
@@ -136,7 +140,11 @@ async function cargarTerrenos() {
           "/Terreno_Web/index.html?id=" +
           num +
           "#item-" +
-          num
+          num +
+          "\nImg: " +
+          window.location.host +
+          "/Terreno_Web/" +
+          rutaImagen
       )}" target="_blank"><img id="imagen-flotante" src="${imgInfo}" ></a>
             <span class="texto-flotante">Haga click en el título para más información<br>Presione aquí para contactarse con un vendedor.!</span>
           </div>
@@ -399,12 +407,20 @@ async function ConvertirApesos(importe) {
   const options = {method: "GET", headers: {accept: "application/json"}};
   const valor = importe.replace(".", "");
   try {
-    const resp = await fetch(
-      `https://api.fastforex.io/convert?from=USD&to=ARS&amount=${valor}&api_key=53f03dc89e-3ac874c308-t6aaw0`,
-      options
-    );
-    data = await resp.json();
-    const pesos = await data.result.ARS;
+    let url = `https://open.er-api.com/v6/latest/usd`;
+    const resp2 = await fetch(url);
+    const data2 = await resp2.json();
+    let datos = await data2["rates"];
+    let datos1 = await datos["ARS"];
+    let divisas = valor * datos1;
+    console.log(divisas);
+    // const resp = await fetch(
+    //   `https://api.fastforex.io/convert?from=USD&to=ARS&amount=${valor}&api_key=53f03dc89e-3ac874c308-t6aaw0`,
+    //   options
+    // );
+    //data = await resp.json();
+    //const pesos = await data.result.ARS;
+    const pesos = divisas;
     return pesos;
   } catch {
     print("Ha ocurrido un error");

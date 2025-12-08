@@ -397,6 +397,20 @@ body {
   text-transform: capitalize;
 }
 
+.ImgSocial {
+  display: flex;
+  justify-content: center;
+}
+
+.ImgSocial img {
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  padding: 5px;
+  width: 20px;
+  height: 20px;
+}
+
 /* Responsive */
 @media (max-width: 854px) {
   .imgFlotante:hover .texto-flotante {
