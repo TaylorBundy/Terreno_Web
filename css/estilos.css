@@ -417,6 +417,24 @@ footer p a {
   cursor: default;
 }
 
+#tooltip {
+  position: relative;
+  cursor: pointer;
+}
+
+#tooltip:hover::after {
+  content: attr(data-texto);
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  background: black;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  text-transform: capitalize; /* ✔ FUNCIONA */
+}
+
 /* Responsive */
 @media (max-width: 854px) {
   .imgFlotante:hover .texto-flotante {

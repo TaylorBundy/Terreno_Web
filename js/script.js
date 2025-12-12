@@ -140,14 +140,14 @@ async function cargarTerrenos() {
 
       item.innerHTML = `
         <div class="tituloImg">
-          <div class="titulo" title="Haga click en el título para más información">
+          <div id="tooltip" class="titulo" data-texto="Haga click para obtener más información sobre:\n${t.titulo.toLowerCase()}" style="text-transform: capitalize;">
             <h4>
               <a href="detalles.html?id=${num}" target="_blank">${t.titulo.toLowerCase()}</a>
             </h4>
           </div>
           <div class="imagen">
             <div class="TextoImagen">
-            <img src="${rutaImagen}" alt="Terreno" />
+            <img src="${rutaImagen}" alt="Terreno" title="Click para maximizar" />
               <p class="titulo-zoom">${t.titulo.toLowerCase()}</p>
             </div>
             <!-- <img src="${rutaImagen}" alt="Terreno" /> -->
@@ -291,11 +291,13 @@ document.addEventListener("click", function (e) {
     if (!img.classList.contains("img-zoom")) {
       img.classList.add("img-zoom");
       img.style.cursor = "zoom-out";
+      img.title = "Click para minimizar";
       texto.classList.add("active");
     } else {
       // Si ya está en zoom → salir
       img.classList.remove("img-zoom");
       img.style.cursor = "zoom-in";
+      img.title = "Click para maximizar";
       texto.classList.remove("active");
     }
   }
