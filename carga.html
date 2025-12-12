@@ -204,6 +204,7 @@
           let r = await fetch(urlGithub);
           data = await r.json();
         }
+        mostrarLista();
         console.log(data);
       }
       function esLocal() {
