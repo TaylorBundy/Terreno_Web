@@ -1,5 +1,6 @@
 const plataforma = navigator.userAgent;
 let textoBtnUbicacion;
+let textoVendedor;
 const whatsapp = document.querySelector("#imagen-flotante");
 const numero = "+5492995933317";
 const url = `https://wa.me/${encodeURIComponent(numero)}`;
@@ -115,13 +116,13 @@ async function cargarDetalle() {
   const modal = document.getElementById("modal");
   modal.innerHTML = `
         <h2>${t.titulo}</h2>
-        <p><b>Medida:</b> ${t.medida}</p>
-        <p><b>Descripción:</b><br>${t.detalle}</p>
+        <p class="info"><b>Medida:</b> ${t.medida}</p>
+        <p class="info"><b>Descripción:</b><br>${t.detalle}</p>
         <a href="${t.ubicacion}" target="_blank" class="btn-ubicacion">
               <img src="images/ubicacion2.avif">
               <p title="Click para ver la ubicación" class="textoUbicacion">${textoBtnUbicacion}</p>
           </a>
-          <div class="imgFlotante">
+          <!-- <div class="imgFlotante"> -->
           <a href="${url}?text=${encodeURIComponent(
     "Quiero más información sobre: " +
       t.titulo +
@@ -131,9 +132,10 @@ async function cargarDetalle() {
       num +
       "#item-" +
       num
-  )}" target="_blank"><img id="imagen-flotante" src="${imgInfo}" ></a>
-  <p title="Click para ver la ubicación" class="textoUbicacion">Contactar Vendedor</p>
-  </div>
+  )}" target="_blank" class="imgFlotante"><img id="imagen-flotante" src="${imgInfo}" >
+  <p title="Click para contactar Vendedor" class="textoVendedor">${textoVendedor}</p>
+  </a>
+  <!-- </div> -->
         <!-- <p><a href="${
           t.ubicacion
         }" target="_blank" style="color:#4af;">Ver ubicación en Google Maps</a></p> -->
@@ -155,7 +157,7 @@ async function cargarDetalle() {
 // };
 window.onload = () => {
   cargarDetalle();
-  if (plataforma.includes("Android")) {
+  if (plataforma.includes("Android") || plataforma.includes("iPhone")) {
     //creaTop();
     //}
     //setTimeout(() => {
@@ -168,15 +170,26 @@ window.onload = () => {
     //console.log(elemento);
     //}, 1500);
     textoBtnUbicacion = "Ver ubicación";
+    textoVendedor = "Contactar Vendedor";
     imgInfo = "images/whatsapp.avif";
+    // cargarCSS("css/detalles_responsive.css");
   } else if (plataforma.includes("Win")) {
     //creaTop();
     textoBtnUbicacion = "Ver ubicación";
+    textoVendedor = "Contactar Vendedor";
     //imgInfo = "images/left.avif";
     imgInfo = "images/whatsapp.avif";
+    // cargarCSS("css/detalles.css");
   }
   activarMenuImagenHD();
 };
+
+function cargarCSS(ruta) {
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = ruta;
+  document.head.appendChild(link);
+}
 
 // REUTILIZAMOS EXACTAMENTE TU FUNCIÓN:
 function extraerCoordenadas(url) {
@@ -212,19 +225,19 @@ document.addEventListener("click", function (e) {
       img.classList.add("img-zoom2");
       img.style.cursor = "zoom-out";
       if (plataforma.includes("Android")) {
-        img.style.width = "40vw";
-        img.style.height = "20vh";
+        img.style.width = "45vw";
+        img.style.height = "25vh";
       } else {
-        img.style.width = "400px";
-        img.style.height = "300px";
+        img.style.width = "100%";
+        img.style.height = "400px";
       }
       //texto.classList.add("active2");
     } else {
       // Si ya está en zoom → salir
       img.classList.remove("img-zoom2");
       img.style.cursor = "zoom-in";
-      img.style.width = "300px";
-      img.style.height = "200px";
+      img.style.width = "100%";
+      img.style.height = "400px";
       //texto.classList.remove("active2");
     }
   }
