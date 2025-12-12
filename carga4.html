@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Editor Terrenos (GitHub integration)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 1100px;
+        margin: 18px auto;
+        background: #f6f7f9;
+        padding: 18px;
+      }
+      h1,
+      h2 {
+        margin: 6px 0 12px;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .col {
+        flex: 1;
+      }
+      #lista {
+        margin-bottom: 12px;
+      }
+      .item {
+        background: #fff;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        margin-bottom: 8px;
+        cursor: pointer;
+      }
+      .item:hover {
+        background: #f0f8ff;
+      }
+      label {
+        display: block;
+        margin-top: 8px;
+        font-weight: 600;
+      }
+      input[type="text"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+      button {
+        background: #0b79f7;
+        color: #fff;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 8px;
+      }
+      button.warn {
+        background: #d9534f;
+      }
+      button.ghost {
+        background: #6c757d;
+      }
+      #imagenesTerreno {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px;
+        background: #fff;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+      }
+      .mini {
+        position: relative;
+        background: #fff;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid #bbb;
+      }
+      .mini img {
+        display: block;
+        width: 160px;
+        height: 120px;
+        object-fit: cover;
+        cursor: zoom-in;
+      }
+      .mini .controls {
+        position: absolute;
+        right: 6px;
+        top: 6px;
+        display: flex;
+        gap: 6px;
+      }
+      .mini .controls button {
+        padding: 4px 6px;
+        font-size: 12px;
+        border-radius: 4px;
+      }
+      .dropzone {
+        padding: 12px;
+        border: 2px dashed #bbb;
+        border-radius: 8px;
+        background: #fafafa;
+        text-align: center;
+      }
+      .log {
+        background: #111;
+        color: #fff;
+        padding: 8px;
+        border-radius: 6px;
+        font-size: 13px;
+        white-space: pre-wrap;
+        max-height: 220px;
+        overflow: auto;
+      }
+      .small {
+        font-size: 13px;
+        color: #555;
+      }
+      .danger {
+        color: #a00;
+        font-weight: 700;
+      }
+      .flexrow {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .draggable {
+        cursor: grab;
+      }
+      .selected {
+        outline: 3px solid #0b79f7;
+      }
+      .tokenWarn {
+        background: #fff3cd;
+        border: 1px solid #ffeeba;
+        padding: 10px;
+        border-radius: 6px;
+      }
+      .controlsTop {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+      }
+    </style>
+    <!-- JSZip CDN (para generar ZIP si el usuario prefiere bajarlo en vez de usar token).
+       Nota: si trabajás offline y no querés depender del CDN, sacá esta línea e implemento alternativa. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  </head>
+  <body>
+    <h1>Editor de Terrenos — GitHub Integration</h1>
+    <p class="small">
+      Carga tu
+      <code>data/terrenos.json</code>
+      (local o remoto). Al hacer click en un terreno verás su info y sus
+      imágenes; podés subir, eliminar, reordenar y guardar directo en GitHub o
+      generar un ZIP.
+    </p>
+
+    <section
+      style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px"
+    >
+      <div style="flex: 1">
+        <label>Archivo JSON local (opcional)</label>
+        <input type="file" id="fileInput" accept=".json" />
+      </div>
+      <div style="width: 320px">
+        <label>O usar JSON en GitHub (default)</label>
+        <input
+          id="githubJsonUrl"
+          type="text"
+          placeholder="https://taylorbundy.github.io/Terreno_Web/data/terrenos.json"
+          value="https://taylorbundy.github.io/Terreno_Web/data/terrenos.json"
+        />
+      </div>
+    </section>
+
+    <div class="row">
+      <div class="col" style="max-width: 360px">
+        <h2>Lista de Terrenos</h2>
+        <div id="lista" class="small"></div>
+      </div>
+
+      <div class="col">
+        <h2>Detalle / Editar</h2>
+        <div
+          id="detalleForm"
+          style="
+            background: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+          "
+        >
+          <div class="small">
+            Seleccioná un terreno para editar su info y gestionar imágenes
+          </div>
+
+          <label>Título</label>
+          <input id="titulo" type="text" />
+
+          <label>Medida</label>
+          <input id="medida" type="text" />
+
+          <label>Detalle</label>
+          <textarea id="detalle" rows="4"></textarea>
+
+          <label>Precio</label>
+          <input id="precio" type="text" />
+
+          <label>Ubicación (URL Google Maps)</label>
+          <input id="ubicacion" type="text" />
+
+          <div class="flexrow" style="margin-top: 10px">
+            <button id="guardarLocal">Guardar cambios (solo memoria)</button>
+            <button id="limpiarForm" class="ghost">Limpiar</button>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 12px">Imágenes del terreno</h3>
+        <div class="controlsTop">
+          <div style="flex: 1">
+            <div class="dropzone" id="dropzone">
+              Arrastrá/soltá imágenes aquí o hacé click para seleccionar
+            </div>
+            <input
+              id="fileImages"
+              type="file"
+              multiple
+              accept="image/*"
+              style="display: none"
+            />
+            <div class="small" style="margin-top: 6px">
+              Soporta .avif/.webp/.jpg/.png. Las nuevas imágenes se añadirán al
+              final y podrán renombrarse al guardar.
+            </div>
+          </div>
+
+          <div style="width: 340px">
+            <label>Integración GitHub (opcional — para push directo)</label>
+            <div class="tokenWarn small">
+              <div class="danger">Atención:</div>
+              <div>
+                Si querés que el editor SUBA/ELIMINE archivos en tu repo, pegá
+                aquí un
+                <strong>Personal Access Token (PAT)</strong>
+                con permisos
+                <code>repo</code>
+                (o
+                <code>public_repo</code>
+                si el repo es público). Evita exponer tokens en máquinas
+                compartidas.
+              </div>
+            </div>
+            <label>Owner (usuario)</label>
+            <input
+              id="ghOwner"
+              type="text"
+              placeholder="taylorbundy"
+              value="TaylorBundy"
+            />
+            <label>Repo</label>
+            <input
+              id="ghRepo"
+              type="text"
+              placeholder="Terreno_Web"
+              value="Terreno_Web"
+            />
+            <label>Branch</label>
+            <input
+              id="ghBranch"
+              type="text"
+              placeholder="gh-pages"
+              value="master"
+            />
+            <label>Token (PAT)</label>
+            <input id="ghToken" type="text" placeholder="ghp_xxx..." />
+            <div style="margin-top: 8px; display: flex; gap: 8px">
+              <button id="btnTestAuth">Probar credenciales</button>
+              <button id="btnSaveGit" class="warn">
+                Guardar cambios en GitHub
+              </button>
+              <button id="btnZip" class="ghost">Generar ZIP (descarga)</button>
+            </div>
+            <div id="authResult" class="small" style="margin-top: 8px"></div>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 12px">Miniaturas (Arrastrá para reordenar)</h3>
+        <div id="imagenesTerreno"></div>
+
+        <div
+          style="margin-top: 10px; display: flex; gap: 8px; align-items: center"
+        >
+          <button id="btnApplyOrder">Aplicar/Reindexar nombres (local)</button>
+          <div class="small" style="color: #555">
+            → Reordena internamente y actualiza `index.json` cuando guardes.
+          </div>
+        </div>
+
+        <h3 style="margin-top: 12px">Logs</h3>
+        <div id="log" class="log"></div>
+      </div>
+    </div>
+
+    <script>
+      /* ============================
+         UTILIDADES & ESTADO
+         ============================ */
+      const logEl = document.getElementById("log");
+      function log(...args) {
+        logEl.textContent +=
+          args
+            .map((a) =>
+              typeof a === "object" ? JSON.stringify(a, null, 2) : String(a)
+            )
+            .join(" ") + "\\n";
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      let data = []; // array de terrenos (cargado)
+      let indiceActual = null; // index seleccionado
+      let imagesState = []; // array de objetos de imagen: {name, sourceUrl, file, toDelete:false, isNew:false, sha?}
+      let repoInfo = {}; // owner, repo, token, branch
+
+      /* ---------------------------
+         CARGAR JSON (local o github)
+         --------------------------- */
+      document
+        .getElementById("fileInput")
+        .addEventListener("change", async (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const txt = await f.text();
+          try {
+            data = JSON.parse(txt);
+            mostrarLista();
+            log("JSON local cargado:", f.name);
+          } catch (err) {
+            log("Error parseando JSON local", err);
+          }
+        });
+
+      async function fetchJsonEither(localPath, remoteUrl) {
+        // intenta local (ruta relativa) primero, si falla intenta remoteUrl (github pages)
+        try {
+          const r = await fetch(localPath);
+          if (!r.ok) throw "no local";
+          const j = await r.json();
+          log("Cargado JSON local:", localPath);
+          return j;
+        } catch (e) {
+          try {
+            const r2 = await fetch(remoteUrl);
+            if (!r2.ok) throw "no remote";
+            const j2 = await r2.json();
+            log("Cargado JSON remoto:", remoteUrl);
+            return j2;
+          } catch (e2) {
+            log("No pude cargar JSON ni local ni remoto", e, e2);
+            throw new Error("No JSON available");
+          }
+        }
+      }
+
+      async function cargarTerrenosAuto() {
+        const remote = document.getElementById("githubJsonUrl").value.trim();
+        try {
+          data = await fetchJsonEither("data/terrenos.json", remote);
+          mostrarLista();
+        } catch (e) {
+          log("Error cargando terrenos:", e);
+        }
+      }
+      window.addEventListener("DOMContentLoaded", cargarTerrenosAuto);
+
+      /* ---------------------------
+         MOSTRAR LISTA
+         --------------------------- */
+      function mostrarLista() {
+        const lista = document.getElementById("lista");
+        lista.innerHTML = "";
+        data.forEach((t, i) => {
+          const d = document.createElement("div");
+          d.className = "item";
+          d.textContent = `${i + 1}. ${t.titulo || "(sin título)"}`;
+          d.onclick = () => selectTerreno(i);
+          lista.appendChild(d);
+        });
+      }
+
+      /* ---------------------------
+         EXTRAER COORDENADAS (igual a tu lógica)
+         --------------------------- */
+      //   function extraerCoordenadas2(url) {
+      //     if (!url) return null;
+      //     const regexDecimal = /@(-?\\d+\\.\\d+),(-?\\d+\\.\\d+)/;
+      //     const m = url.match(regexDecimal);
+      //     if (m) {
+      //       return {
+      //         lat: m[1].replace("-", "").replace(".", "-"),
+      //         lon: m[2].replace("-", "").replace(".", "-"),
+      //       };
+      //     }
+      //     // fallback: intentar DMS? omito por brevedad
+      //     return null;
+      //   }
+      function extraerCoordenadas(url) {
+        if (!url) return null;
+
+        const regexDecimal = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+        const m = url.match(regexDecimal);
+
+        if (m) {
+          return {
+            lat: m[1].replace("-", "").replace(".", "-"),
+            lon: m[2].replace("-", "").replace(".", "-"),
+          };
+        }
+        return null;
+      }
+
+      /* ---------------------------
+         SELECCIONAR TERRENO
+         --------------------------- */
+      function selectTerreno(i) {
+        indiceActual = i;
+        const t = data[i];
+        document.getElementById("titulo").value = t.titulo || "";
+        document.getElementById("medida").value = t.medida || "";
+        document.getElementById("detalle").value = t.detalle || "";
+        document.getElementById("precio").value = t.precio || "";
+        document.getElementById("ubicacion").value = t.ubicacion || "";
+        imagesState = []; // reset
+        renderImagenesPlaceholder("Cargando imágenes...");
+        cargarImagenesTerreno(t);
+      }
+
+      /* ---------------------------
+         RENDER PLACEHOLDER / MINIATURAS
+         --------------------------- */
+      function renderImagenesPlaceholder(text) {
+        const cont = document.getElementById("imagenesTerreno");
+        cont.innerHTML = `<div class="small" style="padding:10px">${text}</div>`;
+      }
+
+      function renderImagenes() {
+        const cont = document.getElementById("imagenesTerreno");
+        cont.innerHTML = "";
+        imagesState.forEach((imgObj, idx) => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "mini draggable";
+          wrapper.draggable = true;
+          wrapper.dataset.index = idx;
+
+          const img = document.createElement("img");
+          img.src = imgObj.preview || imgObj.sourceUrl || imgObj.dataUrl || "";
+          img.title = imgObj.name || "";
+
+          const controls = document.createElement("div");
+          controls.className = "controls";
+          // delete
+          const del = document.createElement("button");
+          del.textContent = "Eliminar";
+          del.onclick = (ev) => {
+            ev.stopPropagation();
+            markDelete(idx);
+          };
+          // mark existing vs new
+          const info = document.createElement("button");
+          info.textContent = imgObj.isNew
+            ? "Nuevo"
+            : imgObj.toDelete
+            ? "Borrado"
+            : "Existente";
+          info.style.opacity = 0.9;
+          info.disabled = true;
+
+          controls.appendChild(del);
+          controls.appendChild(info);
+
+          wrapper.appendChild(img);
+          wrapper.appendChild(controls);
+
+          // events: click to open large
+          img.onclick = () => {
+            const w = window.open(img.src, "_blank");
+            if (!w) alert("Popup bloqueado — abre en una nueva pestaña");
+          };
+
+          // drag events
+          wrapper.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", String(idx));
+            wrapper.classList.add("selected");
+          });
+          wrapper.addEventListener("dragend", (e) => {
+            wrapper.classList.remove("selected");
+          });
+
+          cont.appendChild(wrapper);
+        });
+
+        // enable drop to reorder
+        cont.addEventListener("dragover", (e) => {
+          e.preventDefault();
+        });
+        cont.addEventListener("drop", (e) => {
+          e.preventDefault();
+          const from = Number(e.dataTransfer.getData("text/plain"));
+          const dropTarget = e.target.closest(".mini");
+          const to = dropTarget
+            ? Number(dropTarget.dataset.index)
+            : imagesState.length - 1;
+          if (isNaN(from) || isNaN(to)) return;
+          const item = imagesState.splice(from, 1)[0];
+          imagesState.splice(to, 0, item);
+          renderImagenes();
+        });
+      }
+
+      /* ---------------------------
+         CARGAR IMÁGENES: desde carpeta (local) o GitHub (contents API)
+         --------------------------- */
+      async function cargarImagenesTerreno(terreno) {
+        //console.log(terreno);
+        renderImagenesPlaceholder("Buscando imágenes... (local o GitHub)");
+        // Determinar carpeta por coordenadas
+        const coords = extraerCoordenadas(terreno.ubicacion);
+        if (!coords) {
+          renderImagenesPlaceholder(
+            "No hay coordenadas válidas en la URL de ubicación."
+          );
+          return;
+        }
+        const carpeta = `terrenos/${coords.lat}/`;
+        log("Carpeta detectada:", carpeta);
+        //console.log(`Carpeta detectada: ${carpeta}`);
+
+        // Intentar cargar index.json localmente
+        let indexData = null;
+        try {
+          const r = await fetch(carpeta + "index.json");
+          if (r.ok) {
+            indexData = await r.json();
+            log("index.json cargado desde local:", carpeta + "index.json");
+            for (let i = 1; i <= indexData.cantidad; i++) {
+              const p = carpeta + i + ".avif";
+              //console.log(p);
+              imagesState.push({name: i + ".avif", sourceUrl: p, isNew: false});
+            }
+            renderImagenes();
+            return;
+          }
+        } catch (e) {
+          // no local
+        }
+
+        // Si no local, intentar GitHub Pages raw URL (user configurable)
+        const remoteJson = document
+          .getElementById("githubJsonUrl")
+          .value.trim();
+        // Attempt to compute base URL like: https://taylorbundy.github.io/Terreno_Web/terrenos/<lat>/
+        const baseRaw = (
+          remoteJson.replace(`/\\/data\\/terrenos.json$/`, "") || ""
+        ).replace(`/\\/data\\/terrenos.json$/`, "");
+        // Better: ask user for owner/repo to build raw URL. We'll use owner/repo if provided.
+        const owner = document.getElementById("ghOwner").value.trim();
+        const repo = document.getElementById("ghRepo").value.trim();
+        const branch =
+          document.getElementById("ghBranch").value.trim() || "gh-pages";
+
+        // Try GitHub Pages style if remoteJson points to github.io
+        try {
+          let tried = false;
+          if (remoteJson.includes(".github.io")) {
+            const base = remoteJson.replace(`/\\/data\\/terrenos.json$/`, "");
+            const indexUrl = base + carpeta + "index.json";
+            const r2 = await fetch(indexUrl);
+            if (r2.ok) {
+              indexData = await r2.json();
+              log("index.json cargado desde GitHub Pages:", indexUrl);
+              for (let i = 1; i <= indexData.cantidad; i++) {
+                imagesState.push({
+                  name: i + ".avif",
+                  sourceUrl: base + carpeta + i + ".avif",
+                  isNew: false,
+                });
+              }
+              renderImagenes();
+              return;
+            }
+            tried = true;
+          }
+
+          // If owner/repo provided, try GitHub Contents API to list files and fetch sha's
+          if (owner && repo) {
+            // call: GET /repos/{owner}/{repo}/contents/{path}?ref={branch}
+            const path = carpeta;
+            const api = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(
+              path
+            )}?ref=${encodeURIComponent(branch)}`;
+            const r3 = await fetch(api);
+            if (r3.ok) {
+              const listing = await r3.json();
+              // listing is array of files — find .avif files
+              const avifs = listing
+                .filter((x) => x.type === "file" && /\\.avif$/.test(x.name))
+                .sort((a, b) =>
+                  a.name.localeCompare(b.name, undefined, {numeric: true})
+                );
+              for (const f of avifs) {
+                imagesState.push({
+                  name: f.name,
+                  sourceUrl: f.download_url,
+                  isNew: false,
+                  sha: f.sha,
+                  githubPath: path + f.name,
+                });
+              }
+              // load index.json if present
+              try {
+                const idxFile = listing.find((x) => x.name === "index.json");
+                if (idxFile) {
+                  const rIdx = await fetch(idxFile.download_url);
+                  if (rIdx.ok) {
+                    indexData = await rIdx.json();
+                    log("index.json desde GitHub API:", idxFile.download_url);
+                  }
+                }
+              } catch (e) {}
+              renderImagenes();
+              return;
+            } else {
+              log(
+                "GitHub API no devolvió listado (¿repo/owner/branch correctos?)",
+                api,
+                r3.status
+              );
+            }
+          }
+
+          if (!tried)
+            log(
+              "No pude localizar index.json en remoto. Probalé con GitHub owner/repo o subí imágenes manualmente."
+            );
+          renderImagenes();
+        } catch (e) {
+          log("Error cargando imágenes remotamente", e);
+          renderImagenes();
+        }
+      }
+
+      /* ---------------------------
+         DROPZONE + SUBIR NUEVAS IMÁGENES (local en memoria)
+         --------------------------- */
+      const dropzone = document.getElementById("dropzone");
+      const fileImages = document.getElementById("fileImages");
+
+      dropzone.addEventListener("click", () => fileImages.click());
+      fileImages.addEventListener("change", (e) =>
+        handleNewFiles(e.target.files)
+      );
+      dropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropzone.style.borderColor = "#4aa";
+      });
+      dropzone.addEventListener("dragleave", (e) => {
+        dropzone.style.borderColor = "";
+      });
+      dropzone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropzone.style.borderColor = "";
+        handleNewFiles(e.dataTransfer.files);
+      });
+
+      function handleNewFiles(fileList) {
+        const files = Array.from(fileList);
+        files.forEach((f) => {
+          // create preview
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            imagesState.push({
+              name: f.name,
+              file: f,
+              dataUrl: ev.target.result,
+              preview: ev.target.result,
+              isNew: true,
+              toDelete: false,
+            });
+            renderImagenes();
+          };
+          reader.readAsDataURL(f);
+        });
+      }
+
+      /* ---------------------------
+         MARCAR BORRADO
+         --------------------------- */
+      function markDelete(idx) {
+        const obj = imagesState[idx];
+        if (!obj) return;
+        if (obj.isNew) {
+          imagesState.splice(idx, 1);
+        } else {
+          obj.toDelete = !obj.toDelete;
+        }
+        renderImagenes();
+      }
+
+      /* ---------------------------
+         BOTONES: guardar local, limpiar, aplicar orden
+         --------------------------- */
+      document.getElementById("guardarLocal").addEventListener("click", () => {
+        if (indiceActual === null) {
+          alert("Seleccioná un terreno primero");
+          return;
+        }
+        const t = data[indiceActual];
+        t.titulo = document.getElementById("titulo").value;
+        t.medida = document.getElementById("medida").value;
+        t.detalle = document.getElementById("detalle").value;
+        t.precio = document.getElementById("precio").value;
+        t.ubicacion = document.getElementById("ubicacion").value;
+        mostrarLista();
+        log("Guardado en memoria para terreno", indiceActual + 1);
+      });
+
+      document.getElementById("limpiarForm").addEventListener("click", () => {
+        document.getElementById("titulo").value = "";
+        document.getElementById("medida").value = "";
+        document.getElementById("detalle").value = "";
+        document.getElementById("precio").value = "";
+        document.getElementById("ubicacion").value = "";
+        imagesState = [];
+        renderImagenes();
+      });
+
+      document.getElementById("btnApplyOrder").addEventListener("click", () => {
+        // Renombra internamente el order (no modifica archivos reales hasta guardar)
+        imagesState = imagesState.filter((x) => !x.toDelete); // quitar los marcados para borrar
+        // reasignar nombres temporales secuenciales
+        imagesState = imagesState.map((it, idx) => {
+          return {
+            ...it,
+            name: idx + 1 + getExt(it.name),
+            isNew: it.isNew,
+            file: it.file,
+            sourceUrl: it.sourceUrl,
+            dataUrl: it.dataUrl,
+            preview: it.preview,
+            sha: it.sha,
+            githubPath: it.githubPath,
+          };
+        });
+        renderImagenes();
+        log("Orden aplicado localmente.");
+      });
+
+      function getExt(name) {
+        const m = name.match(/(\\.\\w+)(?:$|\\?)/);
+        return m ? m[1] : ".avif";
+      }
+
+      /* ---------------------------
+         GITHUB: probar credenciales
+         --------------------------- */
+      document
+        .getElementById("btnTestAuth")
+        .addEventListener("click", async () => {
+          const owner = document.getElementById("ghOwner").value.trim();
+          const repo = document.getElementById("ghRepo").value.trim();
+          const token = document.getElementById("ghToken").value.trim();
+          if (!owner || !repo || !token) {
+            document.getElementById("authResult").textContent =
+              "Completa owner/repo/token.";
+            return;
+          }
+          const r = await fetch(
+            `https://api.github.com/repos/${owner}/${repo}`,
+            {headers: {Authorization: "token " + token}}
+          );
+          if (r.ok) {
+            const j = await r.json();
+            document.getElementById(
+              "authResult"
+            ).textContent = `OK: repo encontrado: ${j.full_name}`;
+          } else {
+            document.getElementById(
+              "authResult"
+            ).textContent = `Error: ${r.status} ${r.statusText}`;
+          }
+        });
+
+      /* ---------------------------
+         GUARDAR EN GITHUB (LO QUE HACE) - operación compleja
+         --------------------------- */
+      document
+        .getElementById("btnSaveGit")
+        .addEventListener("click", async () => {
+          if (indiceActual === null) {
+            alert("Seleccioná un terreno primero");
+            return;
+          }
+          const owner = document.getElementById("ghOwner").value.trim();
+          const repo = document.getElementById("ghRepo").value.trim();
+          const branch =
+            document.getElementById("ghBranch").value.trim() || "gh-pages";
+          const token = document.getElementById("ghToken").value.trim();
+          if (!owner || !repo || !token) {
+            if (
+              !confirm(
+                "No completaste owner/repo/token — deseas generar ZIP en su lugar?"
+              )
+            )
+              return;
+            await generarZipYDescargar();
+            return;
+          }
+
+          // Estado
+          repoInfo = {owner, repo, branch, token};
+          log("Iniciando push a GitHub...");
+
+          const terreno = data[indiceActual];
+          const coords = extraerCoordenadas(terreno.ubicacion);
+          if (!coords) {
+            alert(
+              "No hay coordenadas válidas para este terreno (no puedo determinar carpeta)"
+            );
+            return;
+          }
+          const pathBase = `terrenos/${coords.lat}/`;
+
+          // 1) Obtener lista actual en repo (para saber sha de archivos existentes)
+          const apiList = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(
+            pathBase
+          )}?ref=${encodeURIComponent(branch)}`;
+          let existing = [];
+          try {
+            const rlist = await fetch(apiList, {
+              headers: {Authorization: "token " + token},
+            });
+            if (rlist.ok) {
+              existing = await rlist.json(); // array
+              log(
+                "Listado remoto obtenido. Archivos remotos:",
+                existing.map((x) => x.name).join(", ")
+              );
+            } else {
+              log(
+                "No hay carpeta remota (o no existe). Se crearán archivos nuevos.",
+                rlist.status
+              );
+            }
+          } catch (e) {
+            log("Error al obtener listado remoto:", e);
+          }
+
+          // Helper: subir o actualizar archivo
+          async function putFileToGitHub(path, contentBase64, message, sha) {
+            const api = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(
+              path
+            )}`;
+            const body = {message, content: contentBase64, branch};
+            if (sha) body.sha = sha;
+            const resp = await fetch(api, {
+              method: "PUT",
+              headers: {
+                Authorization: "token " + token,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            });
+            const j = await resp.json();
+            if (!resp.ok) throw j;
+            return j;
+          }
+
+          // Helper: delete file
+          async function deleteFileFromGitHub(path, sha, message) {
+            const api = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(
+              path
+            )}`;
+            const body = {message, sha, branch};
+            const resp = await fetch(api, {
+              method: "DELETE",
+              headers: {
+                Authorization: "token " + token,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            });
+            const j = await resp.json();
+            if (!resp.ok) throw j;
+            return j;
+          }
+
+          // Mapear existing names -> sha
+          const existingMap = {};
+          if (Array.isArray(existing))
+            existing.forEach((f) => (existingMap[f.name] = f.sha));
+
+          // 2) Procesar borrados (imagenesState marcadas toDelete)
+          // Primero identificar archivos existentes con toDelete true
+          for (const img of imagesState.filter((x) => x.toDelete && !x.isNew)) {
+            const remoteName = img.name;
+            const sha = existingMap[remoteName];
+            if (!sha) {
+              log("No encontré sha para", remoteName, "→ ya está ausente?");
+              continue;
+            }
+            try {
+              log("Borrando", pathBase + remoteName);
+              await deleteFileFromGitHub(
+                pathBase + remoteName,
+                sha,
+                `Eliminar ${remoteName} desde editor`
+              );
+              log("Borrado OK", remoteName);
+            } catch (e) {
+              log("Error borrando", remoteName, e);
+            }
+          }
+
+          // 3) Subir/actualizar nuevas imágenes (isNew true) y actualizar existentes que fueron reindexadas
+          // Aplicamos nuevo orden: imagesState debe reflejar el orden final. Renombraremos archivos secuencialmente 1.ext,2.ext...
+          const finalImgs = imagesState.filter((x) => !x.toDelete);
+          for (let i = 0; i < finalImgs.length; i++) {
+            const item = finalImgs[i];
+            const ext = getExt(item.name) || ".avif";
+            const targetName = `${i + 1}${ext}`;
+            const targetPath = pathBase + targetName;
+
+            if (item.isNew) {
+              // subir nuevo (item.file -> base64)
+              try {
+                const base64 = await fileToBase64(item.file); // data:[mime];base64,....
+                const onlyBase64 = base64.split(",")[1];
+                log("Subiendo nuevo", targetPath);
+                await putFileToGitHub(
+                  targetPath,
+                  onlyBase64,
+                  `Agregar ${targetName} desde editor`,
+                  undefined
+                );
+                log("Subida OK", targetName);
+              } catch (e) {
+                log("Error subiendo", targetName, e);
+              }
+            } else {
+              // ya existe remotamente pero tal vez cambió de nombre (reindex). Si existe en existingMap con different name -> move: create new with content of old then delete old
+              if (item.githubPath && item.githubPath !== targetPath) {
+                // get file content from existing source via GitHub API download_url is easier (we have sourceUrl)
+                try {
+                  log("Copiando remoto", item.githubPath, "→", targetPath);
+                  // fetch file binary as arraybuffer then base64
+                  const bin = await fetch(item.sourceUrl).then((r) =>
+                    r.arrayBuffer()
+                  );
+                  const b64 = arrayBufferToBase64(bin);
+                  await putFileToGitHub(
+                    targetPath,
+                    b64,
+                    `Reindex ${targetName} desde editor`,
+                    undefined
+                  );
+                  // delete old
+                  const oldSha = existingMap[item.name];
+                  if (oldSha) {
+                    await deleteFileFromGitHub(
+                      item.githubPath,
+                      oldSha,
+                      `Eliminar antiguo ${item.name} tras reindex`
+                    );
+                  }
+                  log("Reindex OK", item.name, "→", targetName);
+                } catch (e) {
+                  log("Error reindexando", item.name, e);
+                }
+              } else {
+                // existe y mismo nombre: nada que hacer
+                log("Archivo existente sin cambios:", targetName);
+              }
+            }
+          }
+
+          // 4) Actualizar index.json en la carpeta
+          const newCount = imagesState.filter((x) => !x.toDelete).length;
+          const indexContent = {cantidad: newCount};
+          try {
+            // get sha of existing index.json if present
+            let shaIndex = null;
+            if (existingMap["index.json"]) shaIndex = existingMap["index.json"];
+            const contentStr = JSON.stringify(indexContent, null, 2);
+            const contentB64 = btoa(unescape(encodeURIComponent(contentStr))); // utf8 -> base64
+            await putFileToGitHub(
+              pathBase + "index.json",
+              contentB64,
+              `Actualizar index.json (${newCount}) desde editor`,
+              shaIndex
+            );
+            log("index.json actualizado con cantidad =", newCount);
+          } catch (e) {
+            log("Error actualizando index.json", e);
+          }
+
+          alert("Operación de guardado en GitHub finalizada. Revisa logs.");
+        });
+
+      /* ---------------------------
+         ZIP: generar y descargar
+         --------------------------- */
+      async function generarZipYDescargar() {
+        if (indiceActual === null) {
+          alert("Seleccioná un terreno primero");
+          return;
+        }
+        const JSZipLib = window.JSZip;
+        if (!JSZipLib) {
+          alert(
+            "JSZip no cargado. Asegurate de tener conexión a CDN o incluí JSZip localmente."
+          );
+          return;
+        }
+        const zip = new JSZipLib();
+        const terreno = data[indiceActual];
+        const coords = extraerCoordenadas(terreno.ubicacion);
+        if (!coords) {
+          alert("No hay coordenadas válidas");
+          return;
+        }
+        const folder = zip.folder(`terrenos/${coords.lat}/`);
+
+        // Añadir imágenes (solo las que no estén marcadas toDelete)
+        const finalImgs = imagesState.filter((x) => !x.toDelete);
+        for (let i = 0; i < finalImgs.length; i++) {
+          const it = finalImgs[i];
+          const ext = getExt(it.name) || ".avif";
+          const name = `${i + 1}${ext}`;
+          if (it.isNew && it.file) {
+            const ab = await it.file.arrayBuffer();
+            folder.file(name, ab);
+          } else if (it.sourceUrl) {
+            // fetch binary
+            try {
+              const arr = await fetch(it.sourceUrl).then((r) =>
+                r.arrayBuffer()
+              );
+              folder.file(name, arr);
+            } catch (e) {
+              log("Error trayendo remoto para zip:", it.sourceUrl, e);
+            }
+          }
+        }
+        // index.json
+        const indexContent = {cantidad: finalImgs.length};
+        folder.file("index.json", JSON.stringify(indexContent, null, 2));
+
+        const content = await zip.generateAsync({type: "blob"});
+        const url = URL.createObjectURL(content);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `terreno_${coords.lat}_imagenes.zip`;
+        a.click();
+        URL.revokeObjectURL(url);
+        log("ZIP generado y descargado.");
+      }
+
+      document
+        .getElementById("btnZip")
+        .addEventListener("click", generarZipYDescargar);
+
+      /* ---------------------------
+         UTIL: file -> base64
+         --------------------------- */
+      function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+          const r = new FileReader();
+          r.onload = () => resolve(r.result);
+          r.onerror = reject;
+          r.readAsDataURL(file);
+        });
+      }
+      function arrayBufferToBase64(buffer) {
+        let binary = "";
+        const bytes = new Uint8Array(buffer);
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
+      }
+
+      /* ---------------------------
+         Helper: get extension
+         --------------------------- */
+      function getExt(name) {
+        const m = name.match(/(\\.[a-zA-Z0-9]+)(?:$|\\?)/);
+        return m ? m[1] : ".avif";
+      }
+
+      /* ---------------------------
+         Inicial: cargar terrenos si existe
+         --------------------------- */
+      renderImagenesPlaceholder(
+        "Seleccioná un terreno de la lista para ver imágenes."
+      );
+    </script>
+  </body>
+</html>
