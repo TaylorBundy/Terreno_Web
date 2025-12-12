@@ -4,6 +4,7 @@ const whatsapp = document.querySelector("#imagen-flotante");
 const numero = "+5492995933317";
 const url = `https://wa.me/${encodeURIComponent(numero)}`;
 let num;
+let basePath;
 async function cargarDetalle() {
   const params = new URLSearchParams(window.location.search);
   const id = parseInt(params.get("id")) - 1;
@@ -50,7 +51,7 @@ async function cargarDetalle() {
   // }
   if (coords) {
     const carpetaLat = String(coords.lat).replace(".", "-");
-    const basePath = `terrenos/${carpetaLat}/`;
+    basePath = `terrenos/${carpetaLat}/`;
     const indexData = await fetch(`${basePath}index.json`).then((r) =>
       r.json()
     );
@@ -152,7 +153,6 @@ async function cargarDetalle() {
 //   const todos = document.querySelectorAll(".TextoImagen2 img");
 //   console.log(todos);
 // };
-
 window.onload = () => {
   cargarDetalle();
   if (plataforma.includes("Android")) {
@@ -172,9 +172,10 @@ window.onload = () => {
   } else if (plataforma.includes("Win")) {
     //creaTop();
     textoBtnUbicacion = "Ver ubicación";
-    imgInfo = "images/left.avif";
-    imgInfo2 = "images/whatsapp.avif";
+    //imgInfo = "images/left.avif";
+    imgInfo = "images/whatsapp.avif";
   }
+  activarMenuImagenHD();
 };
 
 // REUTILIZAMOS EXACTAMENTE TU FUNCIÓN:
@@ -228,3 +229,153 @@ document.addEventListener("click", function (e) {
     }
   }
 });
+
+// ==========================================
+// MENÚ CONTEXTUAL PARA IMÁGENES (HD en Drive)
+// ==========================================
+
+// Crear menú contextual
+// const menu = document.createElement("div");
+
+// menu.className = "custom-menu";
+// menu.textContent = "Abrir imagen en alta resolución";
+// menu.style.display = "none";
+// //document.body.appendChild(menu);
+// conte.appendChild(menu);
+
+// let imagenActual = null;
+// let driveIDs = null;
+
+// // Cargar archivo de IDs de Drive
+// fetch("data/drive-ids.json")
+//   .then((r) => r.json())
+//   .then((data) => {
+//     driveIDs = data;
+//   });
+
+// // Mostrar menú al hacer clic derecho
+// document.addEventListener("contextmenu", function (e) {
+//   if (e.target.tagName === "IMG" && e.target.closest(".imagen2")) {
+//     e.preventDefault();
+
+//     imagenActual = e.target;
+
+//     menu.style.top = e.pageY + "px";
+//     menu.style.left = e.pageX + "px";
+//     menu.style.display = "block";
+//   } else {
+//     menu.style.display = "none";
+//   }
+// });
+
+// // Cerrar menú al hacer clic en cualquier parte
+// document.addEventListener("click", () => {
+//   menu.style.display = "none";
+// });
+
+// // Abrir imagen HD
+// menu.addEventListener("click", () => {
+//   if (!imagenActual || !driveIDs) return;
+
+//   const ruta = imagenActual.src;
+
+//   // Obtener carpeta (ej: "38-880071")
+//   const carpeta = ruta.split("/terrenos/")[1].split("/")[0];
+
+//   // Obtener nombre del archivo (ej: "2.avif")
+//   const archivo = ruta.split("/").pop();
+
+//   // Obtener número (ej: 2)
+//   const numero = archivo.split(".")[0];
+
+//   // Buscar ID en drive_ids.json
+//   const idDrive = driveIDs[carpeta]?.[numero];
+
+//   if (!idDrive) {
+//     alert("No existe una versión HD asociada a esta imagen.");
+//     return;
+//   }
+
+//   // Construir URL final
+//   //const urlHD = `https://drive.google.com/thumbnail?id=${idDrive}=s3000?authuser=0`;
+//   const urlHD = `https://lh3.googleusercontent.com/d/${idDrive}=s3000?authuser=0`;
+
+//   // Abrir imagen HD en nueva pestaña
+//   window.open(urlHD, "_blank");
+// });
+
+function activarMenuImagenHD() {
+  // ==========================================
+  // MENÚ CONTEXTUAL PARA IMÁGENES (HD en Drive)
+  // ==========================================
+
+  // Crear menú contextual (solo si no existe)
+  let menu = document.querySelector(".custom-menu");
+  let conte = document.querySelector(".imagen2");
+  if (!menu) {
+    menu = document.createElement("div");
+    menu.className = "custom-menu";
+    menu.textContent = "Abrir imagen en alta resolución";
+    menu.style.display = "none";
+    document.body.appendChild(menu);
+    //conte.appendChild(menu);
+  }
+
+  let imagenActual = null;
+  let driveIDs = null;
+
+  // Cargar archivo de IDs de Drive
+  fetch("data/drive-ids.json")
+    .then((r) => r.json())
+    .then((data) => {
+      driveIDs = data;
+    });
+
+  // CLICK DERECHO → mostrar menú
+  document.addEventListener("contextmenu", function (e) {
+    if (e.target.tagName === "IMG" && e.target.closest(".imagen2")) {
+      e.preventDefault();
+      imagenActual = e.target;
+
+      menu.style.top = e.pageY + "px";
+      menu.style.left = e.pageX + "px";
+      menu.style.display = "block";
+    } else {
+      menu.style.display = "none";
+    }
+  });
+
+  // CLICK NORMAL → cerrar menú
+  document.addEventListener("click", () => {
+    menu.style.display = "none";
+  });
+
+  // Click en "Abrir imagen HD"
+  menu.addEventListener("click", () => {
+    if (!imagenActual || !driveIDs) return;
+
+    const ruta = imagenActual.src;
+
+    // Obtener carpeta del terreno (ej: "38-880071")
+    const carpeta = ruta.split("/terrenos/")[1].split("/")[0];
+
+    // Obtener nombre del archivo (ej: "2.avif")
+    const archivo = ruta.split("/").pop();
+
+    // Obtener número de imagen (ej: "2")
+    const numero = archivo.split(".")[0];
+
+    // Buscar ID de la imagen HD en drive_ids.json
+    const idDrive = driveIDs[carpeta]?.[numero];
+
+    if (!idDrive) {
+      alert("No existe una versión HD asociada a esta imagen.");
+      return;
+    }
+
+    //const urlHD = `https://drive.google.com/thumbnail?id=${idDrive}`;
+    const urlHD = `https://lh3.googleusercontent.com/d/${idDrive}=s3000?authuser=0`;
+
+    window.open(urlHD, "_blank");
+  });
+}

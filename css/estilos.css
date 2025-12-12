@@ -411,6 +411,12 @@ body {
   height: 20px;
 }
 
+footer p a {
+  text-decoration: none;
+  color: #fff;
+  cursor: default;
+}
+
 /* Responsive */
 @media (max-width: 854px) {
   .imgFlotante:hover .texto-flotante {

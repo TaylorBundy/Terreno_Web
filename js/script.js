@@ -48,6 +48,10 @@ window.onload = function () {
     imgInfo = "images/left.avif";
     imgInfo2 = "images/whatsapp.avif";
   }
+  setTimeout(() => {
+    cargarTerrenos();
+    cargarInformacion();
+  }, 500);
 };
 
 if (plataforma.includes("Android")) {
@@ -272,8 +276,8 @@ function convertirDMADecimal(grados, minutos, segundos, direccion) {
 }
 
 // Ejecutar al cargar la página
-document.addEventListener("DOMContentLoaded", cargarTerrenos);
-window.addEventListener("DOMContentLoaded", cargarInformacion);
+//document.addEventListener("DOMContentLoaded", cargarTerrenos);
+//window.addEventListener("DOMContentLoaded", cargarInformacion);
 
 document.addEventListener("click", function (e) {
   // Solo si clickeaste una imagen dentro de un terreno

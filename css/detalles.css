@@ -59,6 +59,7 @@ body {
 }
 .imgFlotante #imagen-flotante {
   width: 16px;
+  margin-right: 5px;
 }
 .nav-links li a {
   color: white;
@@ -174,6 +175,24 @@ h2 {
   padding: 5px;
   width: 20px;
   height: 20px;
+}
+
+/* Menú contextual personalizado */
+.custom-menu {
+  /* position: fixed; */
+  position: absolute;
+  background: #111;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 9999;
+  display: none;
+  cursor: pointer;
+  border: 1px solid #ff6d00;
+}
+.custom-menu:hover {
+  background: #222;
 }
 
 @media (max-width: 854px) {

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="images/favicon.avif" />
+    <title>L&G promotores</title>
+    <!-- <title>Editor de Terrenos JSON</title> -->
+    <style>
+      body {
+        font-family: Arial;
+        max-width: 850px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #f7f7f7;
+      }
+      h2 {
+        margin-top: 40px;
+      }
+      .item {
+        padding: 10px;
+        background: white;
+        margin: 10px 0;
+        border-radius: 5px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+      }
+      .item:hover {
+        background: #e7e7e7;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0 15px 0;
+      }
+      button {
+        padding: 10px 15px;
+        background: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .btn-red {
+        background: #d9534f;
+      }
+      .btn-red:hover {
+        background: #b52b27;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Editor de archivo JSON - Terrenos</h1>
+
+    <h2>1. Cargar archivo JSON</h2>
+    <input type="file" id="fileInput" accept=".json" />
+
+    <h2>2. Lista de Terrenos</h2>
+    <div id="lista"></div>
+
+    <button
+      onclick="nuevoTerreno()"
+      style="margin-top: 10px; background: #28a745"
+    >
+      + Agregar nuevo terreno
+    </button>
+
+    <h2>3. Editar / Agregar Terreno</h2>
+    <form id="formulario" style="display: none">
+      <label>Título</label>
+      <input type="text" id="titulo" />
+
+      <label>Medida</label>
+      <input type="text" id="medida" />
+
+      <label>Detalle</label>
+      <textarea id="detalle" rows="5"></textarea>
+
+      <label>Precio</label>
+      <textarea id="precio" rows="5"></textarea>
+
+      <label>Ubicación (URL)</label>
+      <input type="text" id="ubicacion" />
+
+      <button type="button" onclick="guardarCambios()">Guardar cambios</button>
+    </form>
+
+    <h2>4. Descargar JSON actualizado</h2>
+    <button onclick="descargarJSON()">Descargar JSON</button>
+
+    <script>
+      let data = [];
+      let indiceActual = null;
+
+      // Leer archivo JSON
+      document
+        .getElementById("fileInput")
+        .addEventListener("change", function (e) {
+          const reader = new FileReader();
+          reader.onload = function () {
+            data = JSON.parse(reader.result);
+            mostrarLista();
+          };
+          reader.readAsText(e.target.files[0]);
+        });
+
+      // Mostrar lista de terrenos
+      function mostrarLista() {
+        const cont = document.getElementById("lista");
+        cont.innerHTML = "";
+
+        data.forEach((item, i) => {
+          let div = document.createElement("div");
+          div.classList.add("item");
+          div.textContent = item.titulo;
+          div.onclick = () => editar(i);
+          cont.appendChild(div);
+        });
+      }
+
+      // Cargar terreno en los inputs
+      function editar(i) {
+        indiceActual = i;
+
+        const item = data[i];
+        document.getElementById("titulo").value = item.titulo;
+        document.getElementById("medida").value = item.medida;
+        document.getElementById("detalle").value = item.detalle;
+        document.getElementById("precio").value = item.precio;
+        document.getElementById("ubicacion").value = item.ubicacion;
+
+        document.getElementById("formulario").style.display = "block";
+      }
+
+      // Crear nuevo terreno
+      function nuevoTerreno() {
+        indiceActual = null; // Indica modo "nuevo"
+
+        document.getElementById("titulo").value = "";
+        document.getElementById("medida").value = "";
+        document.getElementById("detalle").value = "";
+        document.getElementById("precio").value = "";
+        document.getElementById("ubicacion").value = "";
+
+        document.getElementById("formulario").style.display = "block";
+      }
+
+      // Guardar cambios O agregar
+      function guardarCambios() {
+        const nuevo = {
+          titulo: document.getElementById("titulo").value,
+          medida: document.getElementById("medida").value,
+          detalle: document.getElementById("detalle").value,
+          precio: document.getElementById("precio").value,
+          //ubicacion: document.getElementById("ubicacion").value,
+          ubicacion: limpiarUbicacion(
+            document.getElementById("ubicacion").value
+          ),
+        };
+
+        if (indiceActual === null) {
+          // Agregar
+          data.push(nuevo);
+          alert("Terreno agregado correctamente");
+        } else {
+          // Editar
+          data[indiceActual] = nuevo;
+          alert("Cambios guardados");
+        }
+
+        mostrarLista();
+      }
+      function limpiarUbicacion(url) {
+        return url.replace(/"S/g, "''S").replace(/"W/g, "''W");
+      }
+
+      // Descargar archivo JSON modificado
+      function descargarJSON() {
+        const blob = new Blob([JSON.stringify(data, null, 4)], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "terrenos_modificado.json";
+        a.click();
+      }
+      async function cargarTerrenos() {
+        let urlLocal = "data/terrenos.json";
+        let urlGithub =
+          "https://taylorbundy.github.io/Terreno_Web/data/terrenos.json";
+
+        try {
+          let r = await fetch(urlLocal);
+          if (!r.ok) throw "local no existe";
+          data = await r.json();
+        } catch (e) {
+          console.warn("Usando archivo desde GitHub");
+          let r = await fetch(urlGithub);
+          data = await r.json();
+        }
+        console.log(data);
+      }
+      function esLocal() {
+        // Protocolo 'file:' indica que se abrió desde el disco
+        if (window.location.protocol === "file:") return true;
+
+        // HTTPS o HTTP indica que está en un servidor (GitHub Pages, otro host)
+        return false;
+      }
+      window.onload = function () {
+        if (esLocal) {
+          console.log("es local");
+        } else {
+          console.log("no es local");
+        }
+      };
+      // async function cargarTerrenos() {
+      //   const respuesta = await fetch("data/terrenos.json");
+      //   const terrenos = await respuesta.json();
+      //   data = terrenos;
+      //   mostrarLista();
+      //   console.log(terrenos);
+      // }
+      document.addEventListener("DOMContentLoaded", cargarTerrenos);
+    </script>
+  </body>
+</html>
